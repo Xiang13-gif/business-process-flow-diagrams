@@ -1,0 +1,6 @@
+flowchart TD
+    A[Customer Submits Loan Application] --> B[System Validates Input]
+    B --> C{Credit Score >= 500?}
+    C -- Yes --> D[Route to Sales Review]
+    C -- No --> E[Auto-Reject]
+    D --> F[Sales Approves or Rejects]
