@@ -1,45 +1,44 @@
 flowchart TD
     subgraph "Phase 1: Portfolio & Prescreening"
-        A[Start] --> B[Create Business Portfolio];
-        B --> C[Initiate New Loan Application];
-        C --> D(Created Prescreening Stage);
-        D --> E[Automated Business Rules & Sanctions Check];
-        E --> F{Prescreening Decision};
-        F -- Pass --> G(Prescreening Passed);
-        F -- Fail --> Z([Application Declined]);
+        A[Start] --> B[Create Business Portfolio]
+        B --> C[Initiate New Loan Application]
+        C --> D[Created Prescreening Stage]
+        D --> E[Automated Business Rules & Sanctions Check]
+        E --> F{Prescreening Decision}
+        F -- Pass --> G[Prescreening Passed]
+        F -- Fail --> Z[Application Declined]
     end
 
     subgraph "Phase 2: Data Entry & Analysis"
-        G --> H(Data Entry Stage);
-        H --> I["Applicant Submits Detailed Documents <br/> - Financial Statements <br/> - Business Plan <br/> - Legal & Ownership Docs"];
-        I --> J[Credit Analyst Validates Completeness];
-        J --> K{Information Complete?};
-        K -- No --> L[Request for Additional Information (RFI)];
-        L --> I;
-        K -- Yes --> M[Prepare Credit Assessment Package];
+        G --> H[Data Entry Stage]
+        H --> I[Applicant Submits Documents: Financials, Business Plan, Legal Docs]
+        I --> J[Credit Analyst Validates Completeness]
+        J --> K{Information Complete?}
+        K -- No --> L[Request for Additional Information]
+        L --> I
+        K -- Yes --> M[Prepare Credit Assessment Package]
     end
 
     subgraph "Phase 3: Multi-Tiered Approval"
-        M --> N(Approval Stage 1 - Junior Underwriter);
-        N --> O{Decision 1};
-        O -- Approve & Escalate --> P(Approval Stage 2 - Senior Underwriter);
-        O -- Reject --> Z;
-        O -- RFI (More Info Needed) --> L;
+        M --> N[Approval Stage 1 - Junior Underwriter]
+        N --> O{Decision 1}
+        O -- Approve & Escalate --> P[Approval Stage 2 - Senior Underwriter]
+        O -- Reject --> Z
+        O -- RFI --> L
         
-        P --> Q{Decision 2};
-        Q -- Approve & Escalate --> R(Approval Stage 3 - Credit Committee);
-        Q -- Reject --> Z;
-        Q -- RFI (More Info Needed) --> L;
+        P --> Q{Decision 2}
+        Q -- Approve & Escalate --> R[Approval Stage 3 - Credit Committee]
+        Q -- Reject --> Z
+        Q -- RFI --> L
 
-        R --> S{Final Committee Decision};
-        S -- Approve --> T(Application Approval temporary);
-        S -- Reject --> Z;
-        S -- RFI (More Info Needed) --> L;
+        R --> S{Final Committee Decision}
+        S -- Approve --> T[Application Approval Temporary]
+        S -- Reject --> Z
+        S -- RFI --> L
     end
 
     subgraph "Phase 4: Finalization"
-        T --> U[Issue Conditional Offer Letter];
-        U --> V[End of this Flow];
-        Z --> V;
+        T --> U[Issue Conditional Offer Letter]
+        U --> V[End of this Flow]
+        Z --> V
     end
-```
