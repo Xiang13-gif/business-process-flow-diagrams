@@ -1,6 +1,23 @@
 flowchart TD
-    A[Customer Submits Loan Application] --> B[System Validates Input]
-    B --> C{Credit Score >= 500?}
-    C -- Yes --> D[Route to Sales Review]
-    C -- No --> E[Auto-Reject]
-    D --> F[Sales Approves or Rejects]
+    A[Start] --> B(Created Prescreening);
+    B --> C{Applicant Submits Prequalification Inquiry};
+    C --> D[Initial Data Collection & Validation];
+    D --> E(Automated Prescreening Rules Engine);
+    E --> F{Prescreening Decision};
+    F -- Pass --> G[Prequalification Success];
+    F -- Fail --> H[Application Declined];
+    G --> I(Soft Credit Check);
+    I --> J{Prequalification Review};
+    J -- Approved --> K[Generate Prequalified Offers];
+    J -- Declined --> H;
+    K --> L(Applicant Accepts Offer & Submits Formal Application);
+    L --> M[Detailed Document Submission];
+    M --> N(Underwriting Process);
+    N --> O{Hard Credit Check & Risk Assessment};
+    O -- Information Verified --> P[Final Underwriting Decision];
+    O -- More Information Needed --> M;
+    P -- Approved --> Q(Approval temporary);
+    P -- Rejected --> H;
+    Q --> R[Issue Conditional Approval];
+    R --> S[End];
+    H --> S;
