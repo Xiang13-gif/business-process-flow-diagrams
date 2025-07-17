@@ -1,0 +1,68 @@
+graph TD
+    subgraph "Phase 1: Loan Origination and Underwriting (LOS)"
+        A[Start] --> B{Customer Application - Online, Branch, or Mobile}
+        B --> C[Submit Documents - MyKad, Payslips, EPF, etc.]
+        C --> D[Application Registered in LOS and Assigned ID]
+        D --> E[Automated Checks - Blacklist, CCRIS, CTOS]
+        E --> F[System Calculates DSR and Credit Score]
+        F --> G{Initial System Recommendation}
+        G -- Proceed --> H[Credit Analyst Review and Verification]
+        G -- Auto-Decline or High Risk --> Z[Application Rejected]
+        H --> I[Prepare Credit Proposal Memo - CPM]
+        I --> J{Underwriting and Approval Hierarchy}
+        J -- Recommend Approval --> K[Approving Officer or Committee Review]
+        J -- Request for Info --> H
+        J -- Decline --> Z
+        K --> L{Final Approval Decision}
+        L -- Approved --> M[Final Loan Approval in LOS]
+        L -- Rejected --> Z
+    end
+
+    subgraph "Phase 2: Onboarding and Disbursement (Handover to ACS)"
+        M --> N[Issue Letter of Offer - LO]
+        N --> O{Customer Accepts LO?}
+        O -- Yes --> P[Execute Legal Docs - Facility Agreement, Stamping, Legal]
+        O -- No --> Y[Offer Lapsed]
+        P --> Q[Signal Sent to ACS to Create Account]
+        Q --> R[Loan Account and CIF Created in Core Banking / ACS]
+        R --> S[Final Checks and Disbursement Instruction]
+        S --> T[Loan Disbursement to Developer, Seller, or Customer]
+    end
+
+    subgraph "Phase 3: Active Account Management (ACS Core)"
+        T --> U[Loan Account Activated in ACS]
+        U --> V[Monthly Billing and Statement Generation]
+        V --> W[Customer Payment Processing]
+        W --> X{Monitor Repayment Status}
+        X -- On-Time Payment --> V
+        X -- Missed or Partial Payment --> X1[Delinquency Trigger]
+    end
+
+    subgraph "Phase 4: Delinquency and Collections Management"
+        X1 --> C1[Stage 1 - Automated Reminders SMS or Email]
+        C1 --> C2{Payment Received?}
+        C2 -- Yes --> V
+        C2 -- No --> C3[Stage 2 - Soft Collections via Call Center]
+        C3 --> C4{Payment Received?}
+        C4 -- Yes --> V
+        C4 -- No --> C5[Stage 3 - Hard Collections or Legal Notice]
+        C5 --> C6{Account Status Review}
+        C6 -- Restructure or Reschedule --> V
+        C6 -- No Resolution --> C7[Classify as Non-Performing Loan - NPL]
+        C7 --> C8[Begin Legal Recovery or Asset Repossession]
+    end
+
+    subgraph "Phase 5: Loan Closure"
+        V -- Final Payment Received --> E1[Generate Final Redemption Statement]
+        C8 -- Full Settlement Recovered --> E1
+        E1 --> E2[Customer Pays Final Settlement]
+        E2 --> E3[Account Closure Process in ACS]
+        E3 --> E4[Release of Collateral and Legal Discharge]
+        E4 --> F1[Loan Closed and Archived]
+    end
+
+    subgraph "End Points"
+        Z --> End[End Flow]
+        Y --> End
+        F1 --> End
+    end
