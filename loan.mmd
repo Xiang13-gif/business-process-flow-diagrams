@@ -1,33 +1,45 @@
 flowchart TD
-    A[Create Portfolio] --> B[Create Application]
-    B --> C[Prescreening Stage]
-    C --> D[Data Entry Stage]
-    D --> E[Approval Stage 1]
-    E --> F[Approval Stage 2]
-    F --> G[Approval Stage 3]
-    G --> H[Application Approval (Temporary)]
-
-    %% Subgroupings / Styling for better visuals
-    subgraph Application Creation
-        B
+   graph TD
+    subgraph "Phase 1: Portfolio & Prescreening"
+        A[Start] --> B[Create Business Portfolio];
+        B --> C[Initiate New Loan Application];
+        C --> D(Created Prescreening Stage);
+        D --> E[Automated Business Rules & Sanctions Check];
+        E --> F{Prescreening Decision};
+        F -- Pass --> G(Prescreening Passed);
+        F -- Fail --> Z([Application Declined]);
     end
 
-    subgraph Evaluation Stage
-        C
-        D
+    subgraph "Phase 2: Data Entry & Analysis"
+        G --> H(Data Entry Stage);
+        H --> I["Applicant Submits Detailed Documents <br/> - Financial Statements <br/> - Business Plan <br/> - Legal & Ownership Docs"];
+        I --> J[Credit Analyst Validates Completeness];
+        J --> K{Information Complete?};
+        K -- No --> L[Request for Additional Information (RFI)];
+        L --> I;
+        K -- Yes --> M[Prepare Credit Assessment Package];
     end
 
-    subgraph Approval Stages
-        E
-        F
-        G
+    subgraph "Phase 3: Multi-Tiered Approval"
+        M --> N(Approval Stage 1 - Junior Underwriter);
+        N --> O{Decision 1};
+        O -- Approve & Escalate --> P(Approval Stage 2 - Senior Underwriter);
+        O -- Reject --> Z;
+        O -- RFI (More Info Needed) --> L;
+        
+        P --> Q{Decision 2};
+        Q -- Approve & Escalate --> R(Approval Stage 3 - Credit Committee);
+        Q -- Reject --> Z;
+        Q -- RFI (More Info Needed) --> L;
+
+        R --> S{Final Committee Decision};
+        S -- Approve --> T(Application Approval temporary);
+        S -- Reject --> Z;
+        S -- RFI (More Info Needed) --> L;
     end
 
-    style A fill:#cce5ff,stroke:#3399ff,stroke-width:2px
-    style B fill:#e6f2ff
-    style C fill:#ffffcc
-    style D fill:#ffffcc
-    style E fill:#d4edda
-    style F fill:#d4edda
-    style G fill:#d4edda
-    style H fill:#ffc107,stroke:#ff9900,stroke-width:2px
+    subgraph "Phase 4: Finalization"
+        T --> U[Issue Conditional Offer Letter];
+        U --> V[End of this Flow];
+        Z --> V;
+    end
