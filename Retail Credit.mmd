@@ -9,38 +9,38 @@ graph TD
 
     subgraph "Phase 2: Formal Application & Data Entry"
         E --> G[Application Form Submission]
-        G --> H[Document Upload: MyKad, Income Proof, Bank Statements, Booking Form]
+        G --> H[Upload Documents: MyKad, Payslip, Bank Statement, Booking Form]
         H --> I[System Data Entry and Application Creation]
     end
 
     subgraph "Phase 3: Credit Assessment & Verification"
         I --> J[Automated CCRIS and CTOS Checks]
-        J --> K[Debt Service Ratio (DSR) Calculation]
+        J --> K[Debt Service Ratio - DSR Calculation]
         K --> L{Initial System Recommendation}
-        L -- Proceed --> M[Verification of Documents and Income]
+        L -- Proceed --> M[Verify Documents and Income]
         L -- High Risk or Fail --> N[Application Rejected by System]
         M --> O{Information Complete and Verified?}
         O -- Yes --> P[Credit Analyst or Officer Review]
-        O -- No --> Q[Request for Additional Information from Customer]
+        O -- No --> Q[Request Additional Info from Customer]
         Q --> H
     end
 
     subgraph "Phase 4: Underwriting & Approval"
         P --> R[Underwriter Recommendation and Risk Grading]
-        R --> S{Approval Authority Level 1 - Branch Manager}
+        R --> S{Approval Level 1 - Branch Manager}
         S -- Approved --> T{Approval Level 2 - Regional or HQ}
         S -- Rejected --> U[Application Rejected by Underwriter]
-        S -- Refer or Escalate --> T
+        S -- Escalate --> T
         T -- Approved --> V[Final Loan Approval]
         T -- Rejected --> U
     end
 
     subgraph "Phase 5: Offer, Legal & Disbursement"
-        V --> W[Issuance of Letter of Offer (LO)]
-        W --> X{Customer Accepts LO?}
-        X -- Yes --> Y[Execution of Loan Agreement and Legal Docs]
+        V --> W[Issue Letter of Offer]
+        W --> X{Customer Accepts Offer?}
+        X -- Yes --> Y[Sign Agreement and Legal Docs]
         X -- No --> Z[Offer Lapsed or Rejected by Customer]
-        Y --> AA[Final Checks and Set Credit Limit]
+        Y --> AA[Final Checks and Credit Limit Setup]
         AA --> BB[Loan Disbursement]
     end
     
@@ -52,3 +52,4 @@ graph TD
         BB --> CC[Loan Account Activated]
         CC --> End
     end
+
