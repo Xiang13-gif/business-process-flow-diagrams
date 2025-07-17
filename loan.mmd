@@ -1,0 +1,33 @@
+flowchart TD
+    A[Create Portfolio] --> B[Create Application]
+    B --> C[Prescreening Stage]
+    C --> D[Data Entry Stage]
+    D --> E[Approval Stage 1]
+    E --> F[Approval Stage 2]
+    F --> G[Approval Stage 3]
+    G --> H[Application Approval (Temporary)]
+
+    %% Subgroupings / Styling for better visuals
+    subgraph Application Creation
+        B
+    end
+
+    subgraph Evaluation Stage
+        C
+        D
+    end
+
+    subgraph Approval Stages
+        E
+        F
+        G
+    end
+
+    style A fill:#cce5ff,stroke:#3399ff,stroke-width:2px
+    style B fill:#e6f2ff
+    style C fill:#ffffcc
+    style D fill:#ffffcc
+    style E fill:#d4edda
+    style F fill:#d4edda
+    style G fill:#d4edda
+    style H fill:#ffc107,stroke:#ff9900,stroke-width:2px
