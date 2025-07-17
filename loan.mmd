@@ -3,13 +3,13 @@ flowchart TD
         A[Start] --> B[Create Business Portfolio]
         B --> C[Initiate New Loan Application]
         C --> D[Created Prescreening Stage]
-        D --> E[Automated Business Rules & Sanctions Check]
+        D --> E[Automated Business Rules and Sanctions Check]
         E --> F{Prescreening Decision}
         F -- Pass --> G[Prescreening Passed]
         F -- Fail --> Z[Application Declined]
     end
 
-    subgraph "Phase 2: Data Entry & Analysis"
+    subgraph "Phase 2: Data Entry and Analysis"
         G --> H[Data Entry Stage]
         H --> I[Applicant Submits Documents: Financials, Business Plan, Legal Docs]
         I --> J[Credit Analyst Validates Completeness]
@@ -22,12 +22,12 @@ flowchart TD
     subgraph "Phase 3: Multi-Tiered Approval"
         M --> N[Approval Stage 1 - Junior Underwriter]
         N --> O{Decision 1}
-        O -- Approve & Escalate --> P[Approval Stage 2 - Senior Underwriter]
+        O -- Approve and Escalate --> P[Approval Stage 2 - Senior Underwriter]
         O -- Reject --> Z
         O -- RFI --> L
         
         P --> Q{Decision 2}
-        Q -- Approve & Escalate --> R[Approval Stage 3 - Credit Committee]
+        Q -- Approve and Escalate --> R[Approval Stage 3 - Credit Committee]
         Q -- Reject --> Z
         Q -- RFI --> L
 
