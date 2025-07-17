@@ -6,7 +6,8 @@ flowchart TD
         D --> E[Automated Business Rules and Sanctions Check]
         E --> F{Prescreening Decision}
         F -- Pass --> G[Prescreening Passed]
-        F -- Fail --> Z[Application Declined]
+        F -- Fail --> R[Retrigger Credit or Sanctions Check]
+        R --> E
     end
 
     subgraph "Phase 2: Data Entry and Analysis"
@@ -23,15 +24,15 @@ flowchart TD
         M --> N[Approval Stage 1 - Junior Underwriter]
         N --> O{Decision 1}
         O -- Approve and Escalate --> P[Approval Stage 2 - Senior Underwriter]
-        O -- Reject --> Z
+        O -- Reject --> Z[Application Rejected]
         O -- RFI --> L
         
         P --> Q{Decision 2}
-        Q -- Approve and Escalate --> R[Approval Stage 3 - Credit Committee]
+        Q -- Approve and Escalate --> R2[Approval Stage 3 - Credit Committee]
         Q -- Reject --> Z
         Q -- RFI --> L
 
-        R --> S{Final Committee Decision}
+        R2 --> S{Final Committee Decision}
         S -- Approve --> T[Application Approval Temporary]
         S -- Reject --> Z
         S -- RFI --> L
@@ -42,3 +43,4 @@ flowchart TD
         U --> V[End of this Flow]
         Z --> V
     end
+
