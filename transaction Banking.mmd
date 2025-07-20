@@ -1,0 +1,44 @@
+graph TD
+    subgraph "Phase 1: Client Initiation - The Maker"
+        A[Start: Corporate Maker logs into AFFINMAX Portal] --> B[Navigates to Cash Management > Bulk Payment]
+        B --> C[Uploads pre-formatted payment file, e.g. txt or csv]
+        C --> D{System validates file format and syntax}
+        D -- Invalid File --> E[Error flagged, Maker corrects and re-uploads]
+        E --> C
+        D -- Valid File --> F[Maker reviews summary and submits for approval]
+        F --> G[Transaction status: Pending Approval]
+    end
+
+    subgraph "Phase 2: Internal Corporate Approval - The Authorizer"
+        G --> H[Corporate Authorizer logs into AFFINMAX]
+        H --> I[Accesses Pending Tasks queue]
+        I --> J[Selects transaction for review]
+        J --> K[Authorizer verifies transaction details, total amount, transaction count]
+        K --> L{Authorization Decision}
+        L -- Reject --> M[Transaction rejected with reason, flow stops, Maker notified]
+        L -- Approve --> N[Authorizer approves using 2-Factor Authentication]
+        N --> O[Transaction status: Submitted to Bank]
+    end
+
+    subgraph "Phase 3: Bank-Side Processing and Settlement"
+        O --> P[AFFINMAX system receives authorized instruction]
+        P --> Q[Performs fraud scoring and sanctions screening]
+        Q --> R[Checks funds availability in corporate account]
+        R -- Insufficient Funds --> S[Transaction Failed, notification sent to users]
+        R -- Funds Available --> T[Corporate account is debited]
+        T --> U{Route payment based on type}
+        U -- Statutory e.g. EPF, SOCSO, LHDN --> V[File sent to respective statutory bodies]
+        U -- Interbank or Local Payments --> W[Transaction sent to PayNet Gateway]
+        W --> X[Processed via IBG or DuitNow Transfer]
+    end
+
+    subgraph "Phase 4: Confirmation and Reporting"
+        V --> Y[Confirmation received from statutory bodies]
+        X --> Y
+        Y --> Z[Transaction status updated in AFFINMAX: Processed]
+        Z --> AA[Debit and credit advices generated]
+        AA --> BB[Details reflected in account statements for reconciliation]
+        BB --> END[End]
+        M --> END
+        S --> END
+    end
