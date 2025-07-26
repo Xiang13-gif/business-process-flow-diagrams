@@ -1,0 +1,182 @@
+Here is a detailed, step-by-step analysis of the end-to-end process flow for a single payment on Affin Bank's AFFINMAX platform, as described in the provided flowchart. This workflow is designed for individual, manually-entered transactions and emphasizes security through dual control.
+
+Phase 1: Client Initiation - The Maker
+
+This phase covers the actions taken by a corporate user, the 'Maker', to create and submit a single payment instruction.
+
+A: Start: Corporate Maker logs into AFFINMAX
+The process begins with the 'Maker'—a designated user within the client's organization—securely logging into the AFFINMAX corporate internet banking portal using their credentials. This is the secure gateway to all banking functions.
+
+(Arrow A -> B)
+After successful authentication, the Maker navigates to the payment section.
+
+B: Navigates to Pay & Transact > Make a Transfer
+The Maker finds the appropriate menu, such as 'Pay & Transact', and selects the option for making a new transfer. This action brings them to the interface where they can initiate a single payment.
+
+(Arrow B -> C)
+The first crucial choice the Maker must make is the type of payment service to use.
+
+C: Selects Payment Type, e.g. DuitNow to Account, IBG, RENTAS
+The Maker must choose a payment channel based on the transaction's urgency, value, and available recipient information. In the context of the Malaysian payment system, these options have distinct characteristics:
+
+DuitNow to Account: This is an instant, real-time online fund transfer service.[1] It allows transfers using a bank account number and provides immediate confirmation of the recipient's name before finalizing the payment.[1] It is suitable for most everyday payments where speed is important.
+
+Interbank GIRO (IBG): This is a cost-effective electronic fund transfer system that processes payments in batches at specific times during business days.[2][3] While not instant, it is a reliable and low-cost method for less urgent payments to accounts in any of the participating banks in Malaysia.[4][5]
+
+RENTAS (Real-time Electronic Transfer of Funds and Securities): This is Malaysia's high-value payment system for time-critical and large-amount transactions.[6] RENTAS processes transfers instantly (in real-time) and is typically used for transactions exceeding a certain threshold (e.g., RM10,000) where immediate and final settlement is required.[6][7]
+
+The choice made here dictates the transaction's speed, cost, and processing path later in the workflow.
+
+(Arrow C -> D)
+After selecting the payment type, the Maker proceeds to enter the specific details of the transaction.
+
+D: Enters Payment Details Manually: bank, account number, recipient name, reference, amount
+This is the core data entry step. The Maker manually types in all the necessary information for the payment, including the recipient's bank, their account number, the recipient's name, the payment amount, and a payment reference (e.g., invoice number) for reconciliation purposes. Accuracy at this stage is critical.
+
+(Arrow D -> E)
+To improve efficiency and reduce errors, the system offers a convenience feature.
+
+E: Selects favorite payee or enters new details
+If the payment is to a frequent recipient, the Maker can select them from a pre-saved 'favorite payee' list. This auto-fills the banking details, minimizing the risk of data entry errors. If it is a new recipient, the details entered in the previous step are used.
+
+(Arrow E -> F)
+Before submitting, the Maker is prompted to perform a final check.
+
+F: Maker reviews all entered details
+The system displays a summary of the payment details for the Maker to review. This is the first human validation point in the workflow, giving the Maker a chance to catch any typos or errors before the payment instruction moves to the next stage.
+
+(Arrow F -> G)
+Once the Maker is confident that all details are correct, they submit the transaction.
+
+G: Maker submits the payment for approval
+By clicking 'Submit' or a similar button, the Maker finalizes their part of the process. This action formally logs the transaction in the system and sends it into the approval queue.
+
+(Arrow G -> H)
+The transaction now enters a new state, waiting for the second part of the internal control process.
+
+H: Transaction status: Pending Approval
+The transaction is now officially in the system with a status of 'Pending Approval'. It is visible to users with authorization privileges but cannot proceed to the bank for processing until it is approved.
+
+Phase 2: Internal Corporate Approval - The Authorizer
+
+This phase is centered around the 'Authorizer', a different corporate user with the authority to approve financial transactions. This separation of duties is a key security feature.
+
+(Arrow H -> I)
+The workflow now requires action from the Authorizer.
+
+I: Authorizer receives notification or logs in
+The Authorizer is made aware of the pending task, either through an automated notification (like an email or SMS) or by proactively logging into the AFFINMAX portal to check their task queue.
+
+(Arrow I -> J)
+Upon logging in, the Authorizer navigates to their worklist.
+
+J: Opens Task List or Pending Authorization queue
+The Authorizer accesses the section of the portal that lists all transactions awaiting their approval. This queue clearly presents all items that require their attention.
+
+(Arrow J -> K)
+The Authorizer selects the specific payment to examine it.
+
+K: Selects payment and reviews details
+The Authorizer clicks on the transaction initiated by the Maker and scrutinizes all the details (payee, amount, etc.). This is a critical business validation step. The Authorizer's role is to confirm that the payment is legitimate, accurate, and complies with company policy.
+
+(Arrow K -> L)
+After a thorough review, the Authorizer must make a decision.
+
+L: Authorization Decision
+This is a crucial conditional logic node. The Authorizer has two choices: Reject or Approve.
+
+(Arrow L -- Reject --> M)
+If the Authorizer finds an error or determines the payment is not valid, they follow the 'Reject' path.
+
+M: Transaction rejected. Maker notified to correct and resubmit
+The Authorizer rejects the payment and is typically required to provide a reason. The transaction is stopped, and a notification is sent to the original Maker, informing them of the rejection and the reason. The Maker must then either discard the transaction or create a new, corrected one from the beginning.
+
+(Arrow L -- Approve --> N)
+If the Authorizer confirms the payment is valid, they proceed with the 'Approve' path.
+
+N: Authorizer approves using 2-Factor Authentication
+To ensure the security and integrity of the approval, the Authorizer must use a second factor of authentication (2FA). This typically involves entering a one-time password (OTP) sent to their registered mobile phone or generated by a security token. This step confirms the Authorizer's identity and their explicit consent for the transaction.
+
+(Arrow N -> O)
+With the Authorizer's final approval, the transaction is formally handed over to the bank.
+
+O: Transaction status: Submitted to Bank for Processing
+The transaction's status in AFFINMAX updates to 'Submitted to Bank for Processing'. The client-side internal controls are now complete, and the instruction has been securely transmitted to Affin Bank's backend systems.
+
+Phase 3: Bank-Side Processing and Settlement
+
+At this point, Affin Bank's automated systems take over to execute the payment.
+
+(Arrow O -> P)
+The bank's internal systems receive the client's instruction.
+
+P: AFFINMAX backend receives the authorized transaction
+The bank's core processing system ingests the fully authorized payment instruction from the corporate client.
+
+(Arrow P -> Q)
+Before moving any funds, the bank performs mandatory compliance and risk checks.
+
+Q: Performs fraud scoring and sanctions screening
+The system automatically runs the transaction details against a series of checks, including:
+
+Sanctions Screening: Comparing payee details against international and local lists of sanctioned individuals and entities to prevent money laundering and terrorism financing.
+
+Fraud Scoring: Using analytics to detect unusual patterns that might indicate a fraudulent transaction.
+
+(Arrow Q -> R)
+After passing security checks, the system verifies if the client can fund the payment.
+
+R: Check for sufficient funds
+This is another critical conditional logic point. The system checks the balance of the corporate client's account to ensure there are enough funds to cover the payment amount.
+
+(Arrow R -- Insufficient Funds --> S)
+If the account balance is too low, the transaction cannot proceed.
+
+S: Transaction rejected. Status: Failed. Users notified
+The transaction is immediately rejected, and its status is updated to 'Failed'. A notification is sent to the corporate users explaining the reason for the failure. The process for this transaction ends here.
+
+(Arrow R -- Funds Available --> T)
+If funds are sufficient, the payment execution continues.
+
+T: Corporate account is debited
+The payment amount is deducted from the corporate client's account. The funds are now committed to the transaction.
+
+(Arrow T -> U)
+The bank sends the payment to the appropriate national payment network.
+
+U: Transaction routed to payment network, e.g. PayNet for IBG, DuitNow, RENTAS
+Based on the payment type selected by the Maker back in step C, the transaction is routed to the correct clearing house. In Malaysia, this is typically PayNet, which operates the IBG, DuitNow, and RENTAS systems.[8][9]
+
+Phase 4: Confirmation and Reporting
+
+The final phase involves confirming the outcome of the transaction and providing the necessary records for the client.
+
+(Arrow U -> V)
+The external network processes the payment and reports back.
+
+V: PayNet processes transfer and confirms status
+The payment network (PayNet) facilitates the credit to the recipient's bank account and sends a confirmation message back to Affin Bank's system indicating the transaction was successful.
+
+(Arrow V -> W)
+The client-facing portal is updated with the final outcome.
+
+W: Transaction status in AFFINMAX updated: Successful
+The transaction's status in the AFFINMAX portal is changed to 'Successful' or 'Processed', providing a clear confirmation to the corporate users.
+
+(Arrow W -> X)
+The system generates proof of the transaction.
+
+X: Transaction receipt or debit advice generated
+A digital receipt or a formal debit advice is created and made available for download. This document serves as the official record of the transaction for the client's accounting purposes.
+
+(Arrow X -> Y)
+The transaction is permanently recorded in the client's account history.
+
+Y: Transaction logged in account history and statement
+The transaction is posted to the client's online account history and will appear on their official bank statement. This step is crucial for financial reconciliation.
+
+(Arrows M -> Y and S -> Y)
+These paths indicate that even unsuccessful transactions are recorded. A transaction that was Rejected (M) by the Authorizer or Failed (S) due to insufficient funds is also logged in the account history. This ensures a complete and transparent audit trail, allowing the company to track all attempted activities, not just the successful ones.
+
+(Arrow Y -> END)
+This marks the successful completion and recording of the transaction workflow.
