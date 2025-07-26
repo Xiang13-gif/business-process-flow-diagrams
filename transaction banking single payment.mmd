@@ -1,0 +1,39 @@
+graph TD
+    subgraph "Phase 1: Client Initiation - The Maker"
+        A[Start: Corporate Maker logs into AFFINMAX] --> B[Navigates to Pay & Transact > Make a Transfer]
+        B --> C{Selects Payment Type, e.g. DuitNow to Account, IBG, RENTAS}
+        C --> D[Enters Payment Details Manually: bank, account number, recipient name, reference, amount]
+        D --> E[Selects favorite payee or enters new details]
+        E --> F[Maker reviews all entered details]
+        F --> G[Maker submits the payment for approval]
+        G --> H[Transaction status: Pending Approval]
+    end
+
+    subgraph "Phase 2: Internal Corporate Approval - The Authorizer"
+        H --> I[Authorizer receives notification or logs in]
+        I --> J[Opens Task List or Pending Authorization queue]
+        J --> K[Selects payment and reviews details]
+        K --> L{Authorization Decision}
+        L -- Reject --> M[Transaction rejected. Maker notified to correct and resubmit]
+        L -- Approve --> N[Authorizer approves using 2-Factor Authentication]
+        N --> O[Transaction status: Submitted to Bank for Processing]
+    end
+
+    subgraph "Phase 3: Bank-Side Processing and Settlement"
+        O --> P[AFFINMAX backend receives the authorized transaction]
+        P --> Q[Performs fraud scoring and sanctions screening]
+        Q --> R{Check for sufficient funds}
+        R -- Insufficient Funds --> S[Transaction rejected. Status: Failed. Users notified]
+        R -- Funds Available --> T[Corporate account is debited]
+        T --> U[Transaction routed to payment network, e.g. PayNet for IBG, DuitNow, RENTAS]
+    end
+
+    subgraph "Phase 4: Confirmation and Reporting"
+        U --> V[PayNet processes transfer and confirms status]
+        V --> W[Transaction status in AFFINMAX updated: Successful]
+        W --> X[Transaction receipt or debit advice generated]
+        X --> Y[Transaction logged in account history and statement]
+        Y --> END[End]
+        M --> Y
+        S --> Y
+    end
