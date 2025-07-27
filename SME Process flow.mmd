@@ -1,0 +1,73 @@
+graph TD
+    subgraph "Phase 1: Digital Onboarding and Setup"
+        A[Start: SME Director visits CIMB Biz website] --> B[Initiates Apply Now for a Business Account]
+        B --> C[Completes online application with SSM number and MyKad details]
+        C --> D[Uploads digital documents - IC, Business Registration Docs]
+        D --> E{Bank Back-Office Verification}
+        E -- Information Validated --> F[Business Account and CIF are created]
+        F --> G[Welcome Email sent with Digital Banking setup instructions]
+        G --> H[Admin or Director logs in for the first time]
+        H --> I[Sets up company profile and user roles - Makers and Authorizers]
+        I --> J[SME Digital Banking Dashboard Activated]
+    end
+
+    subgraph "Phase 2: Cash Management - Payments (Maker-Authorizer Flow)"
+        J --> K{Select Payment Type}
+        K -- Single Payment --> K1[Maker enters single payment details manually]
+        K -- Bulk Payment --> K2[Maker uploads pre-formatted payment file]
+        K -- Statutory Payment --> K3[Maker selects statutory body and enters contribution details]
+        K1 --> L[Maker submits for approval]
+        K2 --> L
+        K3 --> L
+        L --> M[Transaction Status: Pending for Authorization]
+        M --> N[Notification sent to Authorizer]
+        N --> O[Authorizer logs in and opens Pending Tasks]
+        O --> P[Authorizer reviews transaction details]
+        P --> Q{Authorization Decision}
+        Q -- Reject --> R[Transaction Rejected with Remarks. Maker is notified]
+        Q -- Approve --> S[Authorizer approves using SecureTAC with 2FA]
+        S --> T[Transaction Status: Submitted to Bank]
+        T --> U[Bank processes transaction via PayNet or statutory body]
+        U --> V[Transaction Status: Successful. Advices generated]
+    end
+
+    subgraph "Phase 3: Cash Management - Collections and Receivables"
+        J --> W{Select Collection Method}
+        W -- Generate DuitNow QR --> W1[Generate static or dynamic QR code]
+        W1 --> W2[Customer scans QR to pay]
+        W2 --> W3[Funds credited to SME account]
+        W3 --> W4[Real-time transaction notification appears on dashboard]
+        W -- View Incoming Funds --> X[View real-time account balances and credits]
+    end
+
+    subgraph "Phase 4: Business Financing Application"
+        J --> Y[Navigate to Loans and Financing Section]
+        Y --> Z[Select financing product such as Term Loan]
+        Z --> AA[Complete online form with pre-filled company data]
+        AA --> BB[Upload financial documents - statements, director's documents]
+        BB --> CC[Submit application digitally]
+        CC --> DD[Bank's Loan Origination System receives application]
+        DD --> EE[Credit Analyst reviews and pulls CCRIS/CTOS reports]
+        EE --> FF{Credit Committee Underwriting Decision}
+        FF -- Approved --> GG[Digital Letter of Offer issued via portal]
+        FF -- Rejected --> HH[Digital rejection notice with reasons]
+        GG --> II[SME accepts the offer digitally]
+        II --> JJ[Loan disbursed to SME account]
+    end
+
+    subgraph "Phase 5: Trade Finance Services"
+        J --> T1[Navigate to Trade Finance Module]
+        T1 --> T2{Select Trade Product like LC or Bank Guarantee}
+        T2 --> T3[Complete digital application form]
+        T3 --> T4[Upload required documents - invoice, contracts]
+        T4 --> T5[Submit for bank processing]
+        T5 --> T6[Bank Trade Finance team processes request]
+        T6 --> T7[Digital copy of issued LC/BG available on portal]
+    end
+
+    subgraph "Phase 6: Account Servicing and Reporting"
+        J --> S1[View or Download Account Statements]
+        J --> S2[View transaction history with advanced search]
+        J --> S3[Set up alerts and notifications]
+        J --> S4[Manage user access rights and approval matrix]
+    end
