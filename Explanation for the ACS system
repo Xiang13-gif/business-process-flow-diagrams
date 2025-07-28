@@ -1,0 +1,375 @@
+Loan Origination System (LOS) to the back-end Account Control System (ACS).
+Here is a highly detailed, step-by-step analysis of the entire process flow.
+Overall Process Logic and Objective
+The flowchart illustrates a complete banking workflow designed to manage the two distinct halves of a loan's life:
+1. Loan Origination (Getting the Business): This is the function of the LOS (Phase 1). Its goal is to efficiently process new applications, perform rigorous risk assessment (underwriting), and make a clear "approve" or "reject" decision. It is optimized for speed, accuracy in data collection, and compliance with credit policies.
+2. Loan Servicing (Managing the Business): This is the function of the ACS (Phases 3, 4, 5). Once a loan is approved and disbursed, its purpose is to manage the account over its entire lifespan (which could be decades for a mortgage). This includes routine payment processing, delinquency management, customer service, and eventual closure.
+The "Handover" in Phase 2 is the critical bridge connecting these two specialized systems, ensuring data integrity and a seamless transition from an "application" to a "live account."
+
+Phase 1: Loan Origination and Underwriting (LOS)
+This phase is entirely focused on assessing risk and deciding whether to grant a loan.
+Node A: Start
+* Purpose: The initiation point of the entire process.
+Arrow from A to B
+* Purpose: Represents a potential borrower deciding to apply for a loan.
+Node B: Customer Application - Online, Branch, or Mobile
+* Purpose: To capture the customer's initial intent and basic information through their preferred channel.
+* User Action: The customer fills out a preliminary application form, either independently online, with the help of a bank officer at a branch, or via a mobile app.
+* System/Bank Action: The system corresponding to the channel (e.g., the bank's website) collects the initial data.
+Arrow from B to C
+* Purpose: The progression from initial inquiry to providing formal documentation.
+Node C: Submit Documents - MyKad, Payslips, EPF, etc.
+* Purpose: To gather the necessary evidence to verify the applicant's identity, income, and financial standing.
+* User Action: The customer provides physical or digital copies of their documents. In Malaysia, this typically includes their MyKad (National ID), recent salary slips, bank statements, and EPF (Employees Provident Fund) statement.
+* System/Bank Action: A bank officer or an online portal receives these documents and prepares them for processing.
+Arrow from C to D
+* Purpose: The formal creation of a case file within the bank's internal system.
+Node D: Application Registered in LOS and Assigned ID
+* Purpose: To create a unique, traceable record for the application.
+* System/Bank Action: All the customer's data and documents are entered into the Loan Origination System (LOS). The LOS assigns a unique Application ID, which will be used to track the case throughout the entire approval process.
+Arrow from D to E
+* Purpose: To initiate the first layer of automated risk screening.
+Node E: Automated Checks - Blacklist, CCRIS, CTOS
+* Purpose: To perform immediate, non-negotiable background checks against internal and external databases. This is a critical first-pass filter.
+* System Action: The LOS automatically sends inquiries to:
+    * Internal Blacklist: Checks if the applicant has defaulted with the bank before.
+    * CCRIS: Pulls the official credit report from Bank Negara Malaysia to see all existing loans and repayment history with all financial institutions.
+    * CTOS: Pulls a supplementary report that includes data on directorships, legal actions, and bankruptcies.
+Arrow from E to F
+* Purpose: To use the collected financial data to calculate key risk metrics.
+Node F: System Calculates DSR and Credit Score
+* Purpose: To quantify the applicant's risk level and affordability.
+* System Action: The LOS uses the income data from payslips/EPF and the debt data from CCRIS/CTOS to automatically calculate:
+    * Debt Service Ratio (DSR): The percentage of a person's income used to pay off their debts. Banks have strict DSR limits (e.g., not exceeding 60%).
+    * Credit Score: An internal score generated based on various factors (income stability, credit history, age, etc.) to predict the likelihood of default.
+Arrow from F to G
+* Purpose: To present the results of the automated analysis for a preliminary system-level decision.
+Node G: Initial System Recommendation (Conditional Logic)
+* Purpose: To act as an automated gatekeeper, filtering out clearly unqualified applicants without wasting human resources.
+* Path 1: G -- Auto-Decline or High Risk --> Z (Application Rejected)
+    * Decision Criteria: The system found a critical red flag: the applicant is on a blacklist, the DSR is far above the bank's maximum threshold, or their credit score is well below the minimum acceptable level.
+    * Consequence: The application is automatically rejected. The workflow for this applicant stops, and a rejection notice is sent.
+* Path 2: G -- Proceed --> H (Credit Analyst Review)
+    * Decision Criteria: The applicant passed all the automated checks. Their DSR and credit score are within an acceptable range for further consideration.
+    * Consequence: The application is moved to a queue for manual review by a human expert.
+Node H: Credit Analyst Review and Verification
+* Purpose: To perform a detailed, qualitative assessment of the application that a machine cannot.
+* System/Bank Action: A Credit Analyst opens the case in the LOS. They scrutinize all documents for authenticity, analyze the stability of the applicant's income source, understand the purpose of the loan, and apply their professional judgment to the case.
+Arrow from H to I
+* Purpose: To formalize the analyst's findings and recommendation.
+Node I: Prepare Credit Proposal Memo - CPM
+* Purpose: To create a standardized summary document for the final approver(s).
+* System/Bank Action: The analyst writes a CPM, which summarizes the applicant's profile, the loan details, the key findings from the CCRIS/CTOS reports, the DSR calculation, and provides a clear recommendation: "Approve," "Reject," or "Approve with conditions."
+Arrow from I to J
+* Purpose: To submit the complete case file for a formal decision based on approval authority.
+Node J: Underwriting and Approval Hierarchy (Conditional Logic)
+* Purpose: To route the application to the correct person or committee with the authority to approve the loan amount requested. Small loans might be approved by a branch manager, while very large loans require a head office committee.
+* Path 1: J -- Recommend Approval --> K (Approving Officer/Committee Review)
+    * Decision Criteria: The analyst has endorsed the application.
+    * Consequence: The case is escalated up the hierarchy for a final decision.
+* Path 2: J -- Request for Info --> H (RFI)
+    * Decision Criteria: The analyst finds missing or unclear information (e.g., a blurred document, an unexplained credit inquiry).
+    * Consequence: The application is sent back to the analyst (or even the customer) to provide the missing information. This creates a loop until the case is complete.
+* Path 3: J -- Decline --> Z (Application Rejected)
+    * Decision Criteria: The analyst, after detailed review, determines the risk is too high and recommends rejection.
+    * Consequence: The application is formally rejected.
+Node K: Approving Officer or Committee Review
+* Purpose: The final human decision point.
+* System/Bank Action: The designated approver(s) review the CPM and all associated documents to make the final call.
+Arrow from K to L
+* Purpose: To execute the final decision.
+Node L: Final Approval Decision (Conditional Logic)
+* Purpose: To formally approve or reject the loan.
+* Path 1: L -- Approved --> M (Final Loan Approval in LOS)
+    * Decision Criteria: The approver agrees with the recommendation to approve.
+    * Consequence: The loan is officially approved.
+* Path 2: L -- Rejected --> Z (Application Rejected)
+    * Decision Criteria: The approver disagrees with a positive recommendation or confirms a negative one, deeming the risk unacceptable.
+    * Consequence: The application is finally and formally rejected.
+Node M: Final Loan Approval in LOS
+* Purpose: To log the approved status in the system of record, creating a permanent, auditable event. This concludes the LOS phase.
+
+Phase 2: Onboarding and Disbursement (Handover to ACS)
+This phase acts as the bridge, converting the approved application into a live loan account.
+Node N: Issue Letter of Offer - LO
+* Purpose: To present the official, legally binding offer to the customer.
+* System/Bank Action: The bank generates the LO, which details the approved loan amount, interest rate, tenure, and all terms and conditions.
+Node O: Customer Accepts LO? (Conditional Logic)
+* Purpose: To get the customer's formal agreement to the bank's terms.
+* Path 1: O -- Yes --> P (Execute Legal Docs)
+    * Decision Criteria: The customer agrees to the terms and signs the LO.
+    * Consequence: The legal process begins.
+* Path 2: O -- No --> Y (Offer Lapsed)
+    * Decision Criteria: The customer rejects the offer or does not respond within the validity period.
+    * Consequence: The offer is voided, and the process ends.
+Node P: Execute Legal Docs - Facility Agreement, Stamping, Legal
+* Purpose: To complete all necessary legal formalities to make the loan agreement legally enforceable. This includes signing the main Facility Agreement and having it legally stamped.
+Node Q: Signal Sent to ACS to Create Account
+* Purpose: The critical "handshake" between the two systems.
+* System Action: The LOS, upon confirmation of legal document completion, sends an automated, secure instruction to the Account Control System (ACS) to create a new loan account.
+Node R: Loan Account and CIF Created in Core Banking / ACS
+* Purpose: To create the permanent servicing account for the loan.
+* System Action: The ACS receives the signal and creates the loan account. It also creates or updates the Customer Information File (CIF), which is the master profile of the customer at the bank.
+Node S: Final Checks and Disbursement Instruction
+* Purpose: A final verification step before releasing funds.
+* System/Bank Action: A bank operations team performs a final check to ensure all conditions are met, then authorizes the disbursement.
+Node T: Loan Disbursement to Developer, Seller, or Customer
+* Purpose: The actual release of money.
+* System/Bank Action: Funds are transferred to the appropriate party (e.g., to a property developer for a new house, a car dealer for a car loan, or directly to the customer's account for a personal loan).
+
+Phase 3: Active Account Management (ACS Core)
+The loan is now live, and the ACS is fully in control of its day-to-day management.
+Node U: Loan Account Activated in ACS
+* Purpose: To formally begin the loan servicing lifecycle. The repayment clock starts ticking.
+Node V: Monthly Billing and Statement Generation
+* Purpose: The routine monthly process of informing the customer of their due payment.
+Node W: Customer Payment Processing
+* Purpose: To accept and record the customer's monthly installment payments.
+Node X: Monitor Repayment Status (Conditional Logic)
+* Purpose: The core monitoring function of the ACS.
+* Path 1: X -- On-Time Payment --> V
+    * Decision Criteria: Payment is received in full and on time.
+    * Consequence: This is the "happy path." The loop resets for the next month.
+* Path 2: X -- Missed or Partial Payment --> X1
+    * Decision Criteria: No payment or an incomplete payment is received by the due date.
+    * Consequence: This triggers the delinquency management workflow.
+
+Phase 4: Delinquency and Collections Management
+This phase details the bank's escalating response to missed payments.
+Node X1: Delinquency Trigger
+* Purpose: A flag is raised in the ACS, marking the account as "past due."
+Node C1: Stage 1 - Automated Reminders SMS or Email
+* Purpose: A low-cost, initial attempt to remind the customer.
+Node C2: Payment Received? (Conditional Logic)
+* Consequence: If Yes, the account returns to the normal servicing loop (V). If No, it escalates.
+Node C3: Stage 2 - Soft Collections via Call Center
+* Purpose: Human intervention. A call center agent contacts the customer to understand the situation and request payment.
+Node C4: Payment Received? (Conditional Logic)
+* Consequence: If Yes, the account returns to normal (V). If No, it escalates to a more serious stage.
+Node C5: Stage 3 - Hard Collections or Legal Notice
+* Purpose: A formal, more severe action. This may involve field agents visiting the customer or the issuance of a formal Letter of Demand.
+Node C6: Account Status Review (Conditional Logic)
+* Purpose: A strategic decision point for seriously delinquent accounts.
+* Path 1: C6 -- Restructure or Reschedule --> V
+    * Decision Criteria: The bank believes the customer can recover if the loan terms are adjusted (e.g., extending the tenure to lower monthly payments).
+    * Consequence: A new agreement is made, and the account returns to the servicing loop under new terms.
+* Path 2: C6 -- No Resolution --> C7
+    * Decision Criteria: The customer is unresponsive, or no viable solution can be found.
+    * Consequence: The bank proceeds with formal default procedures.
+Node C7: Classify as Non-Performing Loan - NPL
+* Purpose: A formal classification that has regulatory and financial implications for the bank. The account is officially recognized as being in default.
+Node C8: Begin Legal Recovery or Asset Repossession
+* Purpose: To start the legal process of recovering the debt, which may involve foreclosing on a property or repossessing a vehicle.
+
+Phase 5: Loan Closure
+This phase describes how a loan account is formally closed.
+Arrow from V to E1: Final Payment Received
+* Purpose: The "happy path" closure, where the customer has paid off the loan naturally over its term.
+Arrow from C8 to E1: Full Settlement Recovered
+* Purpose: The "unhappy path" closure, where the debt is settled through legal action or asset sale.
+Node E1: Generate Final Redemption Statement
+* Purpose: To calculate the final exact amount needed to close the loan, including any remaining interest or fees.
+Node E2: Customer Pays Final Settlement
+* Purpose: The customer makes the final payment to bring the balance to zero.
+Node E3: Account Closure Process in ACS
+* Purpose: The ACS performs the final administrative steps to close the account.
+Node E4: Release of Collateral and Legal Discharge
+* Purpose: For secured loans, this is a critical step. The bank officially releases its claim on the asset (e.g., removes its charge from a property title).
+Node F1: Loan Closed and Archived
+* Purpose: The account is moved from an active state to a historical archive for record-keeping.
+
+End Points
+Node End: End Flow
+* Purpose: The terminal point for all workflows.
+* Paths leading here:
+    * Z --> End: The application was rejected at some point in the origination phase.
+    * Y --> End: The customer did not accept the bank's offer.
+    * F1 --> End: The loan has been fully paid off or settled and is now closed and archived.
+
+（LOS） 与后端的 账户控制系统（ACS） 之间无缝衔接的过程。
+整体流程逻辑与目标
+该流程图清晰地展示了贷款生命周期中两个截然不同的阶段：
+1. 贷款发放（获取业务 - Loan Origination）: 这是 LOS（第一阶段） 的核心功能。其目标是高效处理新申请，执行严格的风险评估（审批），并做出明确的“批准”或“拒绝”决定。该系统为速度、数据收集的准确性以及信贷政策的合规性进行了优化。
+2. 贷款服务（管理业务 - Loan Servicing）: 这是 ACS（第三、四、五阶段） 的核心功能。一旦贷款被批准并发放，它的任务就是在其整个生命周期内（对于房贷可能长达数十年）管理这个账户。这包括日常的还款处理、逾期管理、客户服务以及最终的账户关闭。
+第二阶段的“交接”（Handover） 是连接这两个专业系统的关键桥梁，确保了数据的一致性，并实现了从一个“申请”到一个“有效账户”的平稳过渡。
+
+第一阶段：贷款发放与审批 (LOS)
+这个阶段完全专注于评估风险并决定是否批准一笔贷款。
+节点 A: Start (开始)
+* 目的: 整个流程的起点。
+从 A 到 B 的箭头
+* 目的: 代表一个潜在的借款人决定申请贷款。
+节点 B: Customer Application - Online, Branch, or Mobile (客户申请 - 通过网络、分行或移动端)
+* 目的: 通过客户偏好的渠道，捕获其初步意向和基本信息。
+* 用户操作: 客户独立在线填写、在分行银行职员的帮助下填写，或通过手机App填写初步申请表。
+* 系统/银行操作: 相应渠道的系统（例如银行网站）收集初始数据。
+从 B 到 C 的箭头
+* 目的: 从初步问询进展到提供正式文件。
+节点 C: Submit Documents - MyKad, Payslips, EPF, etc. (提交文件 - 身份证、工资单、公积金等)
+* 目的: 收集必要的证明材料，以核实申请人的身份、收入和财务状况。
+* 用户操作: 客户提供文件的纸质版或电子版。在马来西亚，这通常包括 MyKad（身份证）、近期的工资单、银行对账单和 EPF（雇员公积金） 结单。
+* 系统/银行操作: 银行职员或在线门户接收这些文件，并准备进行处理。
+从 C 到 D 的箭头
+* 目的: 在银行的内部系统中正式创建一个案件档案。
+节点 D: Application Registered in LOS and Assigned ID (申请在LOS中注册并分配ID)
+* 目的: 为该申请创建一个唯一的、可追踪的记录。
+* 系统/银行操作: 客户的所有数据和文件被录入到 贷款发放系统（LOS） 中。LOS会分配一个唯一的 申请ID，该ID将用于在整个审批流程中追踪此案件。
+从 D 到 E 的箭头
+* 目的: 启动第一层的自动化风险筛查。
+节点 E: Automated Checks - Blacklist, CCRIS, CTOS (自动检查 - 黑名单、CCRIS、CTOS)
+* 目的: 对内部和外部数据库进行即时的、不可协商的背景调查。这是至关重要的第一道过滤器。
+* 系统操作: LOS自动向以下系统发送查询请求：
+    * 内部黑名单: 检查申请人之前是否在该银行有过违约记录。
+    * CCRIS: 从马来西亚国家银行调取官方信用报告，查看其在所有金融机构的所有现有贷款和还款历史。
+    * CTOS: 调取一份补充报告，其中包含董事身份、法律诉讼和破产等信息。
+从 E 到 F 的箭头
+* 目的: 使用收集到的财务数据来计算关键的风险指标。
+节点 F: System Calculates DSR and Credit Score (系统计算DSR和信用评分)
+* 目的: 将申请人的风险水平和负担能力进行量化。
+* 系统操作: LOS使用来自工资单/EPF的收入数据和来自CCRIS/CTOS的债务数据，自动计算：
+    * 债务偿还比率 (DSR): 个人收入中用于偿还债务的百分比。银行有严格的DSR上限（例如，不超过60%）。
+    * 信用评分: 基于多种因素（收入稳定性、信用历史、年龄等）生成的内部评分，用以预测违约的可能性。
+从 F 到 G 的箭头
+* 目的: 将自动化分析的结果呈现出来，以供系统进行初步决策。
+节点 G: Initial System Recommendation (系统初步建议) (条件逻辑)
+* 目的: 充当一个自动的“守门员”，在不浪费人力资源的情况下，过滤掉明显不合格的申请人。
+* 路径 1: G -- Auto-Decline or High Risk --> Z (自动拒绝或高风险 -> 申请被拒绝)
+    * 决策标准: 系统发现了一个严重的“红旗”：申请人在黑名单上，DSR远超银行的最高阈值，或者其信用评分远低于最低可接受水平。
+    * 结果: 申请被自动拒绝。该申请人的工作流程停止，并会发送一封拒绝通知。
+* 路径 2: G -- Proceed --> H (继续 -> 信贷分析师审查)
+    * 决策标准: 申请人通过了所有自动化检查。其DSR和信用评分在可进一步考虑的范围内。
+    * 结果: 申请被移交到一个队列中，等待人类专家的手动审查。
+节点 H: Credit Analyst Review and Verification (信贷分析师审查与核实)
+* 目的: 进行机器无法完成的、详细的、定性的申请评估。
+* 系统/银行操作: 一位信贷分析师在LOS中打开这个案件。他们会仔细审查所有文件的真实性，分析申请人收入来源的稳定性，理解贷款的目的，并运用他们的专业判断来评估此案。
+从 H 到 I 的箭头
+* 目的: 将分析师的发现和建议正式化。
+节点 I: Prepare Credit Proposal Memo - CPM (准备信贷提案备忘录)
+* 目的: 为最终的审批人创建一份标准化的摘要文件。
+* 系统/银行操作: 分析师撰写一份CPM，其中总结了申请人的概况、贷款详情、从CCRIS/CTOS报告中的主要发现、DSR计算结果，并提供一个明确的建议：“批准”、“拒绝”或“有条件批准”。
+从 I 到 J 的箭头
+* 目的: 将完整的案件档案提交给拥有相应审批权限的人员进行正式决策。
+节点 J: Underwriting and Approval Hierarchy (审批层级) (条件逻辑)
+* 目的: 将申请路由到有权批准所申请贷款金额的正确人员或委员会。小额贷款可能由分行经理批准，而大额贷款则需要总部的信贷委员会。
+* 路径 1: J -- Recommend Approval --> K (建议批准 -> 审批官/委员会审查)
+    * 决策标准: 分析师已经认可了该申请。
+    * 结果: 案件被上报至更高层级进行最终决策。
+* 路径 2: J -- Request for Info --> H (要求提供信息 -> 返回分析师审查)
+    * 决策标准: 分析师发现信息缺失或不清晰（例如，一份模糊的文件，一个无法解释的信用查询）。
+    * 结果: 申请被退回给分析师（甚至退回给客户）以提供缺失的信息。这就形成了一个循环，直到案件材料完整为止。
+* 路径 3: J -- Decline --> Z (拒绝 -> 申请被拒绝)
+    * 决策标准: 分析师经过详细审查后，确定风险过高并建议拒绝。
+    * 结果: 申请被正式拒绝。
+节点 K: Approving Officer or Committee Review (审批官或委员会审查)
+* 目的: 最终的人工决策点。
+* 系统/银行操作: 指定的审批人审查CPM和所有相关文件，以做出最终决定。
+从 K 到 L 的箭头
+* 目的: 执行最终的决策。
+节点 L: Final Approval Decision (最终批准决定) (条件逻辑)
+* 目的: 正式批准或拒绝这笔贷款。
+* 路径 1: L -- Approved --> M (批准 -> 在LOS中最终批准贷款)
+    * 决策标准: 审批人同意批准的建议。
+    * 结果: 贷款被正式批准。
+* 路径 2: L -- Rejected --> Z (拒绝 -> 申请被拒绝)
+    * 决策标准: 审批人不同意正面的建议，或确认了负面的建议，认为风险不可接受。
+    * 结果: 申请被最终、正式地拒绝。
+节点 M: Final Loan Approval in LOS (在LOS中最终批准贷款)
+* 目的: 在记录系统（System of Record）中记录下已批准的状态，创建一个永久的、可审计的事件。这标志着LOS阶段的结束。
+
+第二阶段：客户引导与资金发放 (交接给ACS)
+这个阶段是连接的桥梁，将已批准的申请转化为一个有效的贷款账户。
+节点 N: Issue Letter of Offer - LO (发出贷款献议书)
+* 目的: 向客户呈递正式的、具有法律约束力的献议。
+* 系统/银行操作: 银行生成LO，其中详细说明了批准的贷款金额、利率、期限以及所有条款和条件。
+节点 O: Customer Accepts LO? (客户是否接受献议书?) (条件逻辑)
+* 目的: 获得客户对银行条款的正式同意。
+* 路径 1: O -- Yes --> P (是 -> 执行法律文件)
+    * 决策标准: 客户同意条款并签署了LO。
+    * 结果: 法律流程开始。
+* 路径 2: O -- No --> Y (否 -> 献议失效)
+    * 决策标准: 客户拒绝了献议，或在有效期内未作回应。
+    * 结果: 献议作废，流程结束。
+节点 P: Execute Legal Docs - Facility Agreement, Stamping, Legal (执行法律文件 - 贷款协议、盖章、法律手续)
+* 目的: 完成所有必要的法律手续，使贷款协议具有法律强制执行力。这包括签署主要的贷款协议并进行合法的盖章。
+节点 Q: Signal Sent to ACS to Create Account (向ACS发送创建账户的信号)
+* 目的: 两个系统之间关键的“握手”环节。
+* 系统操作: LOS在确认法律文件完成后，向 账户控制系统（ACS） 发送一个自动化的、安全的指令，以创建一个新的贷款账户。
+节点 R: Loan Account and CIF Created in Core Banking / ACS (在核心银行系统/ACS中创建贷款账户和客户信息档案)
+* 目的: 为该贷款创建永久的服务账户。
+* 系统操作: ACS接收到信号并创建贷款账户。它同时也会创建或更新 客户信息档案（CIF），这是银行客户的主档案。
+节点 S: Final Checks and Disbursement Instruction (最终检查与发放指令)
+* 目的: 在发放资金前的最后一步验证。
+* 系统/银行操作: 银行运营团队进行最后检查，确保所有条件都已满足，然后授权发放资金。
+节点 T: Loan Disbursement to Developer, Seller, or Customer (向开发商、卖方或客户发放贷款)
+* 目的: 资金的实际发放。
+* 系统/银行操作: 资金被转移给适当的一方（例如，对于新房产，转给开发商；对于车贷，转给汽车经销商；对于个人贷款，直接转入客户账户）。
+
+第三阶段：有效的账户管理 (ACS核心功能)
+贷款现在是有效的，ACS完全控制其日常管理。
+节点 U: Loan Account Activated in ACS (贷款账户在ACS中被激活)
+* 目的: 正式开始贷款的服务生命周期。还款的“时钟”开始走动。
+节点 V: Monthly Billing and Statement Generation (每月账单和结单生成)
+* 目的: 每月例行通知客户其应付账款的流程。
+节点 W: Customer Payment Processing (客户还款处理)
+    * 目的: 接收并记录客户的每月分期付款。
+节点 X: Monitor Repayment Status (监控还款状态) (条件逻辑)
+* 目的: ACS的核心监控功能。
+* 路径 1: X -- On-Time Payment --> V (准时还款 -> 返回每月账单流程)
+    * 决策标准: 全额并准时收到还款。
+    * 结果: 这是“正常路径”（Happy Path）。循环重置，进入下一个月。
+* 路径 2: X -- Missed or Partial Payment --> X1 (逾期或部分还款 -> 触发逾期机制)
+    * 决策标准: 在到期日之前没有收到还款或还款不完整。
+    * 结果: 触发逾期管理工作流程。
+
+第四阶段：逾期与催收管理
+这个阶段详细说明了银行对逾期还款的逐步升级的应对措施。
+节点 X1: Delinquency Trigger (逾期触发)
+* 目的: ACS中会升起一个“标记”，将该账户标记为“逾期”。
+节点 C1: Stage 1 - Automated Reminders SMS or Email (第一阶段 - 自动短信或邮件提醒)
+* 目的: 一种低成本的、初步的提醒客户的尝试。
+节点 C2: Payment Received? (是否收到还款?) (条件逻辑)
+* 结果: 如果是，账户返回正常的还款服务循环（V）。如果否，则升级。
+节点 C3: Stage 2 - Soft Collections via Call Center (第二阶段 - 通过呼叫中心进行温和催收)
+* 目的: 人工介入。呼叫中心的座席联系客户，了解情况并要求付款。
+节点 C4: Payment Received? (是否收到还款?) (条件逻辑)
+* 结果: 如果是，账户返回正常（V）。如果否，则升级到更严重的阶段。
+节点 C5: Stage 3 - Hard Collections or Legal Notice (第三阶段 - 强硬催收或法律通知)
+* 目的: 一个正式的、更严厉的行动。这可能涉及外勤人员上门访问客户，或发出正式的催款函。
+节点 C6: Account Status Review (账户状态审查) (条件逻辑)
+* 目的: 对严重逾期账户的一个战略决策点。
+* 路径 1: C6 -- Restructure or Reschedule --> V (重组或重新安排 -> 返回还款服务循环)
+    * 决策标准: 银行相信如果调整贷款条款（例如，延长还款期限以降低月供），客户可以恢复还款。
+    * 结果: 达成新的协议，账户在新的条款下返回服务循环。
+* 路径 2: C6 -- No Resolution --> C7 (无解决方案 -> 归类为不良贷款)
+    * 决策标准: 客户无响应，或者找不到可行的解决方案。
+    * 结果: 银行着手进行正式的违约程序。
+节点 C7: Classify as Non-Performing Loan - NPL (归类为不良贷款)
+* 目的: 一个正式的分类，对银行有监管和财务上的影响。该账户被官方认定为违约。
+节点 C8: Begin Legal Recovery or Asset Repossession (开始法律追偿或资产收回)
+* 目的: 开始追讨债务的法律程序，可能涉及房产的止赎或车辆的收回。
+
+第五阶段：贷款关闭
+这个阶段描述了一个贷款账户如何被正式关闭。
+从 V 到 E1 的箭头: Final Payment Received (收到最后一笔还款)
+* 目的: “正常路径”的关闭，即客户在贷款期限内自然还清了所有款项。
+从 C8 到 E1 的箭头: Full Settlement Recovered (全额清偿追回)
+* 目的: “非正常路径”的关闭，即通过法律行动或资产出售清偿了债务。
+节点 E1: Generate Final Redemption Statement (生成最终赎回结单)
+* 目的: 计算关闭贷款所需的确切最终金额，包括任何剩余的利息或费用。
+节点 E2: Customer Pays Final Settlement (客户支付最终结算款)
+* 目的: 客户支付最后一笔款项，将余额清零。
+节点 E3: Account Closure Process in ACS (在ACS中进行账户关闭流程)
+* 目的: ACS执行最后的行政步骤以关闭账户。
+节点 E4: Release of Collateral and Legal Discharge (释放抵押品和解除法律抵押)
+* 目的: 对于有抵押的贷款，这是关键一步。银行正式解除其对资产的索取权（例如，从房产地契上移除其抵押权）。
+节点 F1: Loan Closed and Archived (贷款关闭并存档)
+* 目的: 账户从活动状态转移到历史档案中，以备记录。
+
+终点
+节点 End: End Flow (流程结束)
+* 目的: 所有工作流程的终点。
+* 通向此处的路径:
+    * Z --> End: 申请在发放阶段的某个时候被拒绝。
+    * Y --> End: 客户没有接受银行的献议。
+    * F1 --> End: 贷款已全部还清或结清，现已关闭并存档。
+
