@@ -1,60 +1,47 @@
 graph TD
-    A[Customer Initiates Onboarding] --> B{Select Customer Type}
-    B --> C[Individual Customer]
-    B --> D[Business Customer]
+  A[Start: Customer Initiates Onboarding] --> B[Customer Submits Onboarding Form & Documents]
+  B --> C[System Performs Initial Validation]
+  C --> D[Customer Risk Profiling]
+  D --> E[Check against Sanction Lists / Watchlists]
+  E --> F{Any Hit Found?}
+  F -- Yes --> G[Escalate for Manual Review]
+  G --> H[Compliance Review: Enhanced Due Diligence (EDD)]
+  H --> I{EDD Clearance?}
+  I -- No --> J[Reject Customer Application]
+  I -- Yes --> K[Proceed with Onboarding]
+  F -- No --> K
 
-    C --> E[Collect Individual Info: Name, Address, DOB]
-    D --> F[Collect Business Info: Company Name, Address, TIN]
-    F --> G[Identify Ultimate Beneficial Owners]
-    G --> H[Collect UBO Information]
+  K --> L[Check Identity & Verify Documents]
+  L --> M[Perform Face Matching / Liveness Check (if digital)]
+  M --> N[Screen for Politically Exposed Persons (PEPs)]
+  N --> O[Check Ultimate Beneficial Owners (UBOs)]
+  O --> P[Risk Scoring Based on All Factors]
+  P --> Q{Is Risk Score Acceptable?}
+  Q -- No --> R[Reject Application]
+  Q -- Yes --> S[Approve & Create Customer Profile]
 
-    E --> I{Document Collection}
-    H --> I
+  S --> T[Assign Customer ID / CIF]
+  T --> U[Setup Customer Account in Core Banking System]
+  U --> V[Generate Welcome Pack / Notification]
+  V --> W[Store KYC Data for Audit & Review]
+  W --> X[End of Onboarding Process]
 
-    I --> J[Identity Proof: Passport or License]
-    I --> K[Address Proof: Utility Bill or Bank Statement]
-    I --> L[Financial Info: Source of Funds]
+  %% Optional paths
+  G --> Y[Request Additional Info from Customer]
+  Y --> Z{Customer Responds?}
+  Z -- Yes --> H
+  Z -- No --> J
 
-    J --> M{Identity Verification}
-    K --> M
-    L --> M
+  %% Existing customer update scenario
+  AA[Existing Customer] --> AB[Triggers Periodic Review or Update]
+  AB --> AC[Re-validate Documents and Risk Profile]
+  AC --> AD{Significant Changes Found?}
+  AD -- Yes --> AE[Re-run KYC Checks and Update Info]
+  AD -- No --> AF[Continue Monitoring]
 
-    M --> N[Verify Document Authenticity]
-    N --> O{Is Document Valid?}
-    O -- No --> P[Request More Valid Documents]
-    P --> I
-    O -- Yes --> Q[Screen Sanctions and AML Lists]
+  AE --> AG[Update Customer Profile]
+  AG --> AH[Notify Compliance if needed]
+  AH --> AI[Store Changes for Audit]
+  AI --> AJ[End of Update Flow]
 
-    Q --> R{Match Found?}
-    R -- Yes --> S[Enhanced Due Diligence]
-    S --> T[Gather Info: Wealth and Business Nature]
-    T --> U[Manual Compliance Review]
-    U --> V{High Risk?}
-    V -- Yes --> W[Reject Application]
-    V -- No --> X[Conditional Approval]
-
-    R -- No --> Y{Risk Profiling}
-    Y --> Z[Analyze Data: Occupation, Location, Patterns]
-    Z --> AA{Assign Risk Level}
-    AA --> AB[Low Risk]
-    AA --> AC[Medium Risk]
-    AA --> AD[High Risk]
-
-    AD --> S
-    AB --> AE{Final Decision}
-    AC --> AE
-    X --> AE
-
-    AE -- Approve --> AF[Account Approved and Activated]
-    AE -- Reject --> W
-    X -- Conditions Not Met --> W
-
-    AF --> AG[Ongoing Monitoring]
-    AG --> AH{Transaction Monitoring}
-    AH -- Suspicious --> AI[File SAR]
-    AI --> AJ[Update Risk Profile]
-    AH -- Clean --> AG
-    AG --> AK{Periodic Review}
-    AK -- Risk Change --> AJ
-    AK -- No Change --> AG
-end
+  AF --> AG_End[No Change Detected – End of Update Flow]
