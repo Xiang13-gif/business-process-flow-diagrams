@@ -1,47 +1,25 @@
-graph TD
-  A[Start: Customer Initiates Onboarding] --> B[Customer Submits Onboarding Form & Documents]
-  B --> C[System Performs Initial Validation]
-  C --> D[Customer Risk Profiling]
-  D --> E[Check against Sanction Lists / Watchlists]
-  E --> F{Any Hit Found?}
-  F -- Yes --> G[Escalate for Manual Review]
-  G --> H[Compliance Review: Enhanced Due Diligence (EDD)]
-  H --> I{EDD Clearance?}
-  I -- No --> J[Reject Customer Application]
-  I -- Yes --> K[Proceed with Onboarding]
-  F -- No --> K
+flowchart TD
+    A[Start: Customer Initiates Onboarding] --> B[Customer Provides Personal & Business Info]
+    B --> C[Document Upload <br/> (e.g., ID, Utility Bills, SSM Cert)]
+    C --> D[Initial Screening <br/> (Blacklist, Sanctions, PEP Check)]
+    D --> E{Customer Risk Rating}
+    
+    E -- Low Risk --> F[Proceed with Standard Due Diligence (SDD)]
+    E -- Medium Risk --> G[Proceed with Customer Due Diligence (CDD)]
+    E -- High Risk --> H[Proceed with Enhanced Due Diligence]
+    
+    F --> J[Verify Identity & Source of Funds]
+    G --> J
+    H --> J
+    
+    J --> K[Internal Compliance Review]
+    K --> L{Compliance Approval?}
+    
+    L -- Approved --> M[Customer Account Created]
+    L -- Rejected --> N[Notify Customer & Terminate Process]
+    L -- Require More Info --> O[Request Additional Documents]
+    O --> J
 
-  K --> L[Check Identity & Verify Documents]
-  L --> M[Perform Face Matching / Liveness Check (if digital)]
-  M --> N[Screen for Politically Exposed Persons (PEPs)]
-  N --> O[Check Ultimate Beneficial Owners (UBOs)]
-  O --> P[Risk Scoring Based on All Factors]
-  P --> Q{Is Risk Score Acceptable?}
-  Q -- No --> R[Reject Application]
-  Q -- Yes --> S[Approve & Create Customer Profile]
-
-  S --> T[Assign Customer ID / CIF]
-  T --> U[Setup Customer Account in Core Banking System]
-  U --> V[Generate Welcome Pack / Notification]
-  V --> W[Store KYC Data for Audit & Review]
-  W --> X[End of Onboarding Process]
-
-  %% Optional paths
-  G --> Y[Request Additional Info from Customer]
-  Y --> Z{Customer Responds?}
-  Z -- Yes --> H
-  Z -- No --> J
-
-  %% Existing customer update scenario
-  AA[Existing Customer] --> AB[Triggers Periodic Review or Update]
-  AB --> AC[Re-validate Documents and Risk Profile]
-  AC --> AD{Significant Changes Found?}
-  AD -- Yes --> AE[Re-run KYC Checks and Update Info]
-  AD -- No --> AF[Continue Monitoring]
-
-  AE --> AG[Update Customer Profile]
-  AG --> AH[Notify Compliance if needed]
-  AH --> AI[Store Changes for Audit]
-  AI --> AJ[End of Update Flow]
-
-  AF --> AG_End[No Change Detected – End of Update Flow]
+    M --> P[Welcome Email & Activation]
+    P --> Q[Start Transaction Monitoring]
+    Q --> R[End]
