@@ -1,25 +1,95 @@
-flowchart TD
-    A[Start: Customer Initiates Onboarding] --> B[Customer Provides Personal & Business Info]
-    B --> C[Document Upload <br/> (e.g., ID, Utility Bills, SSM Cert)]
-    C --> D[Initial Screening <br/> (Blacklist, Sanctions, PEP Check)]
-    D --> E{Customer Risk Rating}
+graph TD
+    %% === STAGE 1: APPLICATION AND INITIAL CHECKS ===
+    subgraph Application Stage
+        A[Customer Initiates Loan Application <br> via Web, App, or Branch]
+        B{New or Used Vehicle?}
+        C[Collect Applicant and Co-applicant Info <br> Personal, Contact, Employment]
+        D[Collect Vehicle Information <br> New: Model, Dealer Info <br> Used: VIN, Seller Info]
+        E{Initial KYC and AML Pre-Screening}
+        F[Application Received]
+    end
     
-    E -- Low Risk --> F[Proceed with Standard Due Diligence (SDD)]
-    E -- Medium Risk --> G[Proceed with Customer Due Diligence (CDD)]
-    E -- High Risk --> H[Proceed with Enhanced Due Diligence]
-    
-    F --> J[Verify Identity & Source of Funds]
-    G --> J
-    H --> J
-    
-    J --> K[Internal Compliance Review]
-    K --> L{Compliance Approval?}
-    
-    L -- Approved --> M[Customer Account Created]
-    L -- Rejected --> N[Notify Customer & Terminate Process]
-    L -- Require More Info --> O[Request Additional Documents]
-    O --> J
+    A --> B
+    B -- New --> C
+    B -- Used --> C
+    C --> D
+    D --> E
+    E -- Pass --> F
+    E -- Fail or High-Risk --> V[Reject or Escalate to Compliance]
 
-    M --> P[Welcome Email & Activation]
-    P --> Q[Start Transaction Monitoring]
-    Q --> R[End]
+    %% === STAGE 2: DOCUMENTATION AND VERIFICATION ===
+    subgraph Documentation and Verification
+        G{Document Collection}
+        H[Income Proof <br> Payslips, Tax Returns]
+        I[Identity and Address Proof <br> ID Card, Utility Bills]
+        J[Vehicle Pro-forma Invoice or Sale Agreement]
+        K{Are Documents Complete and Valid?}
+        L[Request for Additional or Correct Documents]
+    end
+
+    F --> G
+    G --> H
+    G --> I
+    G --> J
+    J --> K
+    I --> K
+    H --> K
+    K -- No --> L
+    L --> G
+    
+    %% === STAGE 3: CREDIT AND RISK ASSESSMENT ===
+    subgraph Credit Assessment
+        M[Perform Credit Bureau Check]
+        N{Credit Score Above Threshold?}
+        O[Verify Income and Employment Details]
+        P{Information Verified Successfully?}
+    end
+
+    K -- Yes --> M
+    M --> N
+    N -- No --> V
+    N -- Yes --> O
+    O --> P
+    P -- No --> L
+
+    %% === STAGE 4: VEHICLE VALIDATION AND UNDERWRITING ===
+    subgraph Underwriting and Approval
+        Q[Validate Vehicle Quotation or Valuation]
+        R{Valuation and LTV Ratio Acceptable?}
+        S[Final Underwriting Review <br> Debt-to-Income Ratio, Affordability]
+        T{Loan Approved?}
+    end
+    
+    P -- Yes --> Q
+    Q --> R
+    R -- No --> V
+    R -- Yes --> S
+    S --> T
+    
+    %% === STAGE 5: OFFER, ACCEPTANCE, AND DISBURSEMENT ===
+    subgraph Offer and Disbursement
+        U[Generate and Issue Loan Offer <br> Amount, Tenure, Interest Rate, Fees]
+        W{Customer Accepts Offer?}
+        X[Loan Agreement Signing <br> Physical or Digital]
+        Y[Disburse Funds to Car Dealer or Seller]
+    end
+
+    T -- No --> V
+    T -- Yes --> U
+    U --> W
+    W -- No --> Z[Application Withdrawn]
+    W -- Yes --> X
+    X --> Y
+
+    %% === STAGE 6: POST-DISBURSEMENT ACTIVITIES ===
+    subgraph Post-Loan Servicing
+        AA[Confirm Vehicle Registration and Title <br> Bank's Lien Recorded]
+        AB[Loan Account Activated in System]
+        AC[Start Repayment Tracking and Monitoring]
+        AD[Periodic Account Management]
+    end
+    
+    Y --> AA
+    AA --> AB
+    AB --> AC
+    AC --> AD
