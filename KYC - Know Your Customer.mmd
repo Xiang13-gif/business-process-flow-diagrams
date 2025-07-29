@@ -1,44 +1,44 @@
 graph TD
-    %% Node Definitions
+    %% === NODE DEFINITIONS ===
     A[Customer Initiates Onboarding]
     B{Select Customer Type}
     C[Individual Customer]
     D[Business Customer]
-    E[Collect Individual Information <br>- Name, Address, DOB, etc.]
-    F[Collect Business Information <br>- Company Name, Address, TIN, etc.]
-    G[Identify Ultimate Beneficial Owners (UBOs)]
+    E[Collect Individual Information <br> Name, Address, DOB, etc.]
+    F[Collect Business Information <br> Company Name, Address, TIN, etc.]
+    G[Identify Ultimate Beneficial Owners UBOs]
     H[Collect UBO Information]
     I{Document Collection}
-    J[Identity Proof <br>- Passport, Driver's License]
-    K[Address Proof <br>- Utility Bill, Bank Statement]
-    L[Financial Information <br>- Source of Funds, Income Statement]
+    J[Identity Proof <br> Passport, Driver's License]
+    K[Address Proof <br> Utility Bill, Bank Statement]
+    L[Financial Information <br> Source of Funds, Income Statement]
     M{Identity Verification}
     N[Verify Document Authenticity]
     O{Is Document Valid?}
-    P[Request for Additional/Valid Documents]
-    Q[Screen against Sanctions/AML Lists <br>- PEP, Adverse Media]
+    P[Request for Additional or Valid Documents]
+    Q[Screen against Sanctions and AML Lists <br> PEP, Adverse Media]
     R{Match Found?}
-    S[Enhanced Due Diligence (EDD)]
-    T[Gather Additional Information <br>- Source of Wealth, Nature of Business]
+    S[Enhanced Due Diligence EDD]
+    T[Gather Additional Information <br> Source of Wealth, Nature of Business]
     U[Manual Review by Compliance Team]
     V{High Risk?}
     W[Reject Application]
     X[Conditional Approval]
     Y{Risk Profiling}
-    Z[Analyze Customer Data <br>- Occupation, Location, Transaction Patterns]
+    Z[Analyze Customer Data <br> Occupation, Location, Transaction Patterns]
     AA{Assign Risk Level}
     AB[Low Risk]
     AC[Medium Risk]
     AD[High Risk]
     AE{Decision}
-    AF[Account Approved & Activated]
+    AF[Account Approved and Activated]
     AG[Ongoing Monitoring]
     AH{Transaction Monitoring}
-    AI[File Suspicious Activity Report (SAR)]
+    AI[File Suspicious Activity Report SAR]
     AJ[Review and Update Risk Profile]
     AK{Periodic Review}
 
-    %% Linking
+    %% === LINKS AND PROCESS FLOW ===
     A --> B
     B --> C
     B --> D
@@ -59,7 +59,7 @@ graph TD
     K --> M
     L --> M
 
-    subgraph Verification & Screening
+    subgraph Verification and Screening
       M --> N
       N --> O
       O -- No --> P
@@ -71,7 +71,7 @@ graph TD
     R -- Yes --> S
     R -- No --> Y
 
-    subgraph Enhanced Due Diligence (EDD)
+    subgraph Enhanced Due Diligence
         S --> T
         T --> U
         U --> V
