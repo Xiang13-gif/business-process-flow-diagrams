@@ -11,19 +11,23 @@ graph TD
     E --> I{Document Collection}
     H --> I
 
-    I --> J[Identity Proof <br/>- Passport, Driver's License]
-    I --> K[Address Proof <br/>- Utility Bill, Bank Statement]
-    I --> L[Financial Information <br/>- Source of Funds, Income Statement]
+    subgraph Document Collection
+        I --> J[Identity Proof <br/>- Passport, Driver's License]
+        I --> K[Address Proof <br/>- Utility Bill, Bank Statement]
+        I --> L[Financial Information <br/>- Source of Funds, Income Statement]
+    end
 
     J --> M{Identity Verification}
     K --> M
     L --> M
 
-    M --> N[Verify Document Authenticity]
-    N --> O{Is Document Valid?}
-    O -- No --> P[Request for Additional/Valid Documents]
-    P --> I
-    O -- Yes --> Q[Screen against Sanctions/AML Lists <br/>- PEP, Adverse Media]
+    subgraph Verification & Screening
+        M --> N[Verify Document Authenticity]
+        N --> O{Is Document Valid?}
+        O -- No --> P[Request for Additional/Valid Documents]
+        P --> I
+        O -- Yes --> Q[Screen against Sanctions/AML Lists <br/>- PEP, Adverse Media]
+    end
 
     Q --> R{Match Found?}
     R -- Yes --> S[Enhanced Due Diligence (EDD)]
@@ -35,28 +39,35 @@ graph TD
 
     R -- No --> Y{Risk Profiling}
 
-    Y --> Z[Analyze Customer Data <br/>- Occupation, Location, Transaction Patterns]
-    Z --> AA{Assign Risk Level}
-    AA --> AB[Low Risk]
-    AA --> AC[Medium Risk]
-    AA --> AD[High Risk]
+    subgraph Risk Assessment
+        Y --> Z[Analyze Customer Data <br/>- Occupation, Location, Transaction Patterns]
+        Z --> AA{Assign Risk Level}
+        AA --> AB[Low Risk]
+        AA --> AC[Medium Risk]
+        AA --> AD[High Risk]
+    end
 
     AD --> S
-    AB --> AE{Decision}
+
+    AE{Decision}
+    AB --> AE
     AC --> AE
     X --> AE
-
-    AE -- Approve --> AF[Account Approved & Activated]
-    AE -- Reject --> W
-    X -- Conditions not Met --> W
+    
+    subgraph Final Decision
+        AE -- Approve --> AF[Account Approved & Activated]
+        AE -- Reject --> W
+        X -- Conditions not Met --> W
+    end
 
     AF --> AG[Ongoing Monitoring]
 
-    AG --> AH{Transaction Monitoring}
-    AH -- Suspicious Activity --> AI[File Suspicious Activity Report (SAR)]
-    AI --> AJ[Review and Update Risk Profile]
-    AH -- No Suspicious Activity --> AG
-    AG --> AK{Periodic Review}
-    AK -- Change in Risk --> AJ
-    AK -- No Change --> AG
-end
+    subgraph Ongoing Monitoring
+        AG --> AH{Transaction Monitoring}
+        AH -- Suspicious Activity --> AI[File Suspicious Activity Report (SAR)]
+        AI --> AJ[Review and Update Risk Profile]
+        AH -- No Suspicious Activity --> AG
+        AG --> AK{Periodic Review}
+        AK -- Change in Risk --> AJ
+        AK -- No Change --> AG
+    end
