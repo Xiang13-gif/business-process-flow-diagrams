@@ -1,73 +1,111 @@
 graph TD
-    A[Customer Initiates Onboarding] --> B{Select Customer Type}
-    B --> C[Individual Customer]
-    B --> D[Business Customer]
+    %% Node Definitions
+    A[Customer Initiates Onboarding]
+    B{Select Customer Type}
+    C[Individual Customer]
+    D[Business Customer]
+    E[Collect Individual Information <br>- Name, Address, DOB, etc.]
+    F[Collect Business Information <br>- Company Name, Address, TIN, etc.]
+    G[Identify Ultimate Beneficial Owners (UBOs)]
+    H[Collect UBO Information]
+    I{Document Collection}
+    J[Identity Proof <br>- Passport, Driver's License]
+    K[Address Proof <br>- Utility Bill, Bank Statement]
+    L[Financial Information <br>- Source of Funds, Income Statement]
+    M{Identity Verification}
+    N[Verify Document Authenticity]
+    O{Is Document Valid?}
+    P[Request for Additional/Valid Documents]
+    Q[Screen against Sanctions/AML Lists <br>- PEP, Adverse Media]
+    R{Match Found?}
+    S[Enhanced Due Diligence (EDD)]
+    T[Gather Additional Information <br>- Source of Wealth, Nature of Business]
+    U[Manual Review by Compliance Team]
+    V{High Risk?}
+    W[Reject Application]
+    X[Conditional Approval]
+    Y{Risk Profiling}
+    Z[Analyze Customer Data <br>- Occupation, Location, Transaction Patterns]
+    AA{Assign Risk Level}
+    AB[Low Risk]
+    AC[Medium Risk]
+    AD[High Risk]
+    AE{Decision}
+    AF[Account Approved & Activated]
+    AG[Ongoing Monitoring]
+    AH{Transaction Monitoring}
+    AI[File Suspicious Activity Report (SAR)]
+    AJ[Review and Update Risk Profile]
+    AK{Periodic Review}
 
-    C --> E[Collect Individual Information <br/>- Name, Address, DOB, etc.]
-    D --> F[Collect Business Information <br/>- Company Name, Address, TIN, etc.]
-    F --> G[Identify Ultimate Beneficial Owners (UBOs)]
-    G --> H[Collect UBO Information]
-
-    E --> I{Document Collection}
+    %% Linking
+    A --> B
+    B --> C
+    B --> D
+    C --> E
+    D --> F
+    F --> G
+    G --> H
+    E --> I
     H --> I
-
+    
     subgraph Document Collection
-        I --> J[Identity Proof <br/>- Passport, Driver's License]
-        I --> K[Address Proof <br/>- Utility Bill, Bank Statement]
-        I --> L[Financial Information <br/>- Source of Funds, Income Statement]
+      I --> J
+      I --> K
+      I --> L
     end
 
-    J --> M{Identity Verification}
+    J --> M
     K --> M
     L --> M
 
     subgraph Verification & Screening
-        M --> N[Verify Document Authenticity]
-        N --> O{Is Document Valid?}
-        O -- No --> P[Request for Additional/Valid Documents]
-        P --> I
-        O -- Yes --> Q[Screen against Sanctions/AML Lists <br/>- PEP, Adverse Media]
+      M --> N
+      N --> O
+      O -- No --> P
+      P --> I
+      O -- Yes --> Q
     end
 
-    Q --> R{Match Found?}
-    R -- Yes --> S[Enhanced Due Diligence (EDD)]
-    S --> T[Gather Additional Information <br/>- Source of Wealth, Nature of Business]
-    T --> U[Manual Review by Compliance Team]
-    U --> V{High Risk?}
-    V -- Yes --> W[Reject Application]
-    V -- No --> X[Conditional Approval]
+    Q --> R
+    R -- Yes --> S
+    R -- No --> Y
 
-    R -- No --> Y{Risk Profiling}
-
+    subgraph Enhanced Due Diligence (EDD)
+        S --> T
+        T --> U
+        U --> V
+        V -- Yes --> W
+        V -- No --> X
+    end
+    
     subgraph Risk Assessment
-        Y --> Z[Analyze Customer Data <br/>- Occupation, Location, Transaction Patterns]
-        Z --> AA{Assign Risk Level}
-        AA --> AB[Low Risk]
-        AA --> AC[Medium Risk]
-        AA --> AD[High Risk]
+        Y --> Z
+        Z --> AA
+        AA --> AB
+        AA --> AC
+        AA --> AD
     end
 
     AD --> S
 
-    AE{Decision}
-    AB --> AE
-    AC --> AE
-    X --> AE
-    
     subgraph Final Decision
-        AE -- Approve --> AF[Account Approved & Activated]
+        AB --> AE
+        AC --> AE
+        X --> AE
+        AE -- Approve --> AF
         AE -- Reject --> W
         X -- Conditions not Met --> W
     end
 
-    AF --> AG[Ongoing Monitoring]
+    AF --> AG
 
     subgraph Ongoing Monitoring
-        AG --> AH{Transaction Monitoring}
-        AH -- Suspicious Activity --> AI[File Suspicious Activity Report (SAR)]
-        AI --> AJ[Review and Update Risk Profile]
-        AH -- No Suspicious Activity --> AG
-        AG --> AK{Periodic Review}
-        AK -- Change in Risk --> AJ
-        AK -- No Change --> AG
+      AG --> AH
+      AH -- Suspicious Activity --> AI
+      AI --> AJ
+      AH -- No Suspicious Activity --> AG
+      AG --> AK
+      AK -- Change in Risk --> AJ
+      AK -- No Change --> AG
     end
