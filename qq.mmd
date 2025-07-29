@@ -1,0 +1,61 @@
+```mermaid
+graph TD
+    A[Customer Initiates Onboarding] --> B{Select Customer Type}
+    B --> C[Individual Customer]
+    B --> D[Business Customer]
+
+    C --> E[Collect Individual Info: Name, Address, DOB]
+    D --> F[Collect Business Info: Company Name, Address, TIN]
+    F --> G[Identify Ultimate Beneficial Owners]
+    G --> H[Collect UBO Information]
+
+    E --> I{Document Collection}
+    H --> I
+
+    I --> J[Identity Proof: Passport or License]
+    I --> K[Address Proof: Utility Bill or Bank Statement]
+    I --> L[Financial Info: Source of Funds]
+
+    J --> M{Identity Verification}
+    K --> M
+    L --> M
+
+    M --> N[Verify Document Authenticity]
+    N --> O{Is Document Valid?}
+    O -- No --> P[Request More Valid Documents]
+    P --> I
+    O -- Yes --> Q[Screen Sanctions and AML Lists]
+
+    Q --> R{Match Found?}
+    R -- Yes --> S[Enhanced Due Diligence]
+    S --> T[Gather Info: Wealth and Business Nature]
+    T --> U[Manual Compliance Review]
+    U --> V{High Risk?}
+    V -- Yes --> W[Reject Application]
+    V -- No --> X[Conditional Approval]
+
+    R -- No --> Y{Risk Profiling}
+    Y --> Z[Analyze Data: Occupation, Location, Patterns]
+    Z --> AA{Assign Risk Level}
+    AA --> AB[Low Risk]
+    AA --> AC[Medium Risk]
+    AA --> AD[High Risk]
+
+    AD --> S
+    AB --> AE{Final Decision}
+    AC --> AE
+    X --> AE
+
+    AE -- Approve --> AF[Account Approved and Activated]
+    AE -- Reject --> W
+    X -- Conditions Not Met --> W
+
+    AF --> AG[Ongoing Monitoring]
+    AG --> AH{Transaction Monitoring}
+    AH -- Suspicious --> AI[File SAR]
+    AI --> AJ[Update Risk Profile]
+    AH -- Clean --> AG
+    AG --> AK{Periodic Review}
+    AK -- Risk Change --> AJ
+    AK -- No Change --> AG
+```
