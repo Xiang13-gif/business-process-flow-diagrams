@@ -1,0 +1,49 @@
+graph TD
+    %% === STAGE 1: INITIATION ===
+    subgraph Initiation and Login
+        A[User Logs into Mobile Banking App <br> using Username and Password]
+        B[User Navigates to Security Settings]
+        C[Selects 'Activate Digital Token']
+    end
+
+    A --> B --> C
+
+    %% === STAGE 2: IDENTITY VERIFICATION (MFA) ===
+    subgraph Multi-Factor Verification
+        D[System Prompts for Additional Verification]
+        E[Sends Verification Code OTP <br> to Registered SMS or Email]
+        F[User Enters Received OTP]
+        G{Is OTP Correct and Valid?}
+        H[Display Error, Decrement Retry Counter]
+    end
+
+    C --> D --> E --> F --> G
+    G -- No --> H
+    H --> F
+
+    %% === STAGE 3: DEVICE BINDING AND LOCAL CREDENTIALS ===
+    subgraph Device Binding and PIN Setup
+        I[Identity Verified, Proceed to Binding <br> System registers unique device identifiers]
+        J[User Sets a Secure PIN for Digital Token]
+        K[User Confirms the Secure PIN]
+        L{Do PINs Match?}
+        M[Enable Biometric Authentication <br> Optional, user consent needed]
+    end
+    
+    G -- Yes --> I
+    I --> J --> K --> L
+    L -- No --> J
+    L -- Yes --> M
+
+    %% === STAGE 4: FINAL ACTIVATION AND CONFIRMATION ===
+    subgraph Activation and Confirmation
+        N[System Securely Generates and Stores <br> Token Seed in Device Keystore]
+        O[Digital Token Successfully Activated]
+        P[Display Confirmation and Usage Info <br> Explains new transaction signing flow]
+        Q[Send Confirmation Alert via SMS and Email <br> CRITICAL security notification]
+    end
+
+    M --> N
+    N --> O
+    O --> P
+    P --> Q
