@@ -1,0 +1,182 @@
+Overview of the KYC Process
+The Know Your Customer (KYC) process is a mandatory framework for financial institutions to verify the identity of their clients and assess the potential risks of illegal intentions for the business relationship. The primary goal is to prevent the bank from being used, intentionally or unintentionally, for money laundering, terrorist financing, and other financial crimes. This flowchart visualizes the end-to-end journey from a customer's initial application to their ongoing monitoring after becoming a client.
+
+Phase 1: Onboarding Initiation and Customer Typing
+This initial phase begins the KYC process by capturing the customer's intent and directing them down the correct information-gathering path based on their entity type.
+* A[Customer Initiates Onboarding]
+    * Purpose: This is the entry point of the entire KYC workflow.
+    * Action: A potential customer decides to open an account or use a service offered by the bank. This action can be performed through various channels, such as the bank's website, a mobile application, or by visiting a physical branch.
+    * Arrow from A to B: This signifies the immediate transition from the customer's action to the first crucial step of the bank's process: categorization.
+* B{Select Customer Type}
+    * Purpose: This is a decision node that sorts applicants into the two primary categories. The documentation and verification requirements differ significantly between an individual person and a legal entity.
+    * Action (System/User): The system prompts the applicant (or a bank employee assisting them) to declare whether they are applying as an "Individual Customer" or a "Business Customer."
+    * Logic: This branching is fundamental because business accounts present more complex risks, particularly concerning ownership structures and the source of funds.
+* Paths from B to C and D:
+    * C[Individual Customer]: If the applicant is a private person acting on their own behalf, this path is taken.
+    * D[Business Customer]: If the applicant is a legal entity (e.g., a corporation, partnership, LLC), this path is followed.
+
+Phase 2: Information and Document Collection
+This phase is dedicated to gathering the necessary data and documentary evidence to prove the customer's identity and understand their financial standing.
+* E[Collect Individual Information]
+    * Purpose: To gather Personally Identifiable Information (PII) from an individual applicant.
+    * Action (User/System): The customer enters their personal details into a form. The system captures and stores information such as full legal name, date of birth (DOB), residential address, nationality, and contact details.
+* F[Collect Business Information] -> G[Identify Ultimate Beneficial Owners (UBOs)] -> H[Collect UBO Information]
+    * Purpose: This sequence is a critical part of due diligence for non-individual customers. Its goal is to look through the corporate structure to find the real people who own or control it.
+    * Action (F): The applicant provides the company's legal name, registered address, tax identification number (TIN), and registration details.
+    * Action (G): The system requires the applicant to identify all Ultimate Beneficial Owners (UBOs). A UBO is a person who ultimately owns or controls more than a certain percentage (e.g., 25%) of the company's shares or voting rights, or who otherwise exercises significant control. This is a key anti-money laundering control.
+    * Action (H): For each UBO identified, their individual PII (name, address, DOB, etc.) must be collected, just as for an individual customer.
+* I{Document Collection} Subgraph
+    * Purpose: This centralizes the collection of supporting documents that will be used to verify the information provided earlier.
+    * Action (User): The customer uploads digital copies or provides physical copies of the required documents.
+    * Nodes within the subgraph:
+        * J[Identity Proof]: To verify the customer's and/or UBO's identity. Examples include a passport, driver's license, or national ID card.
+        * K[Address Proof]: To verify their stated residential address. Examples include a recent utility bill, bank statement, or lease agreement.
+        * L[Financial Information]: To understand the customer's financial profile and source of funds. This may include recent payslips, income statements, or a declaration of the source of wealth. This helps in building their risk profile.
+
+Phase 3: Verification and Screening
+Once all information is collected, the bank begins the core verification and screening activities to validate the documents and check the customer against global watchlists.
+* M{Identity Verification}
+    * Purpose: This node marks the beginning of the bank's active verification process.
+    * Action (System): The system aggregates the collected data and documents to start the validation checks.
+* N[Verify Document Authenticity]
+    * Purpose: To ensure the submitted documents are genuine and have not been forged or tampered with.
+    * Action (System/Human): This can be an automated process using AI-powered tools that check security features (like holograms), data consistency, and image integrity. It can also involve manual review by a back-office team.
+* O{Is Document Valid?}
+    * Purpose: A critical decision point based on the authenticity check.
+    * Logic (Decision Criteria): A document is considered invalid if it is expired, blurry/unreadable, appears altered, or fails automated security checks.
+    * 'No' Path to P[Request for Additional/Valid Documents]: If a document fails verification, the process is paused. The system (or a bank employee) notifies the customer, specifies the issue, and requests a new, valid document. This creates a loop back to the document collection phase, preventing the application from proceeding with faulty information.
+    * 'Yes' Path to Q[Screen against Sanctions/AML Lists]: If all documents are deemed authentic and valid, the process moves to the screening stage.
+* Q[Screen against Sanctions/AML Lists]
+    * Purpose: To check if the customer (or UBOs) is a known high-risk individual or is associated with illicit activities.
+    * Action (System): The customer's details are automatically run against multiple databases and watchlists, including:
+        * Sanctions Lists: (e.g., OFAC, UN, EU lists) to identify individuals or entities barred from financial dealings.
+        * PEP (Politically Exposed Person) Lists: To identify individuals who hold prominent public functions, as they present a higher risk for bribery and corruption.
+        * Adverse Media: To search for negative news related to the customer that might indicate involvement in financial crime.
+
+Phase 4: Risk Assessment and Due Diligence
+Based on the screening results and other data, the customer is assigned a risk level, which dictates the level of scrutiny they will receive.
+* R{Match Found?}
+    * Purpose: To determine the next steps based on the outcome of the screening.
+    * Logic (Decision Criteria): A "Yes" decision occurs if the customer's name or other details generate a potential "hit" or match on any of the screened lists. A "No" means the customer is clear of any immediate red flags.
+    * 'No' Path to Y{Risk Profiling}: If no matches are found, the customer proceeds to the standard risk profiling assessment.
+    * 'Yes' Path to S[Enhanced Due Diligence (EDD)]: A potential match automatically escalates the case. This path is for handling high-risk scenarios that require human intervention.
+* The Enhanced Due Diligence (EDD) Path: S -> T -> U -> V
+    * S[Enhanced Due Diligence (EDD)]: A more intensive investigation is initiated.
+    * T[Gather Additional Information]: A compliance analyst may request more detailed information, such as evidence for the source of wealth, the purpose of the account, or clarification on the nature of their business.
+    * U[Manual Review by Compliance Team]: The compliance officer reviews the entire case file—the initial information, the watchlist hit, and any additional documents—to determine if the hit is a true positive and to assess the overall risk.
+    * V{High Risk?}: The final judgment call by the compliance team after EDD.
+        * 'Yes' Path to W[Reject Application]: If the risk is confirmed and deemed unacceptable (e.g., a true match on a sanctions list), the application is rejected.
+        * 'No' Path to X[Conditional Approval]: If the risk is manageable (e.g., the hit was for a low-level PEP), the compliance officer may approve the account but with specific conditions or restrictions in place.
+* Y{Risk Profiling} Subgraph
+    * Purpose: To assign a risk rating (Low, Medium, or High) to every customer, even those without watchlist hits. This rating determines the intensity of future monitoring.
+    * Z[Analyze Customer Data]: An automated risk engine scores the customer based on factors like their country of residence/operation, occupation/industry, intended transaction patterns, and source of funds.
+    * AA{Assign Risk Level}: Based on the score, the system categorizes the customer.
+        * AB[Low Risk] / AC[Medium Risk]: These customers are considered standard and proceed to the final decision.
+        * AD[High Risk]: A customer can be classified as high-risk even without a sanctions hit (e.g., they are a PEP or operate in a high-risk industry). This path correctly directs them back to S[Enhanced Due Diligence (EDD)] because all high-risk customers, regardless of how they were identified, require this deeper level of review.
+
+Phase 5: Final Decision and Activation
+This is the concluding phase of the onboarding process, where a final decision is made and communicated.
+* AE{Decision}
+    * Purpose: This node is the final gate. It consolidates the inputs from the standard paths (Low/Medium risk) and the conditional approval path to make the final call.
+    * 'Approve' Path to AF[Account Approved & Activated]: For all successful applications, the account is formally opened. The customer is notified and granted access to their new account and services.
+    * 'Reject' Path to W[Reject Application]: For any application that is ultimately refused, either through the EDD process or for other policy reasons. The relationship is terminated.
+
+Phase 6: Ongoing Monitoring
+KYC is a continuous process. This final phase ensures that the bank continues to monitor customer activity throughout the life of the relationship to detect any changes in risk.
+* AG[Ongoing Monitoring]
+    * Purpose: Represents the continuous, cyclical nature of monitoring.
+    * AH{Transaction Monitoring}: Automated systems monitor customer transactions in real-time to detect activity that is inconsistent with their known profile (e.g., unusually large sums, transactions with high-risk jurisdictions).
+    * 'Suspicious Activity' Path to AI[File Suspicious Activity Report (SAR)]: If a transaction is flagged and an investigation confirms it is suspicious, the bank is legally required to file a SAR with the relevant financial intelligence unit. This action then leads to AJ[Review and Update Risk Profile], as such an event almost always increases the customer's risk level.
+    * AK{Periodic Review}: The bank periodically re-assesses customer profiles. High-risk customers are reviewed more frequently than low-risk customers. If circumstances have changed (e.g., the customer has become a PEP), their risk profile is updated at AJ, which may trigger more stringent monitoring. If there is no change, the monitoring cycle continues.
+
+
+KYC流程概览
+“了解您的客户”（Know Your Customer, 简称KYC）是金融机构（如银行）必须执行的一套标准流程。其核心目的是验证客户的真实身份，并评估与该客户建立业务关系可能带来的潜在风险。这个流程主要是为了防止银行被有意或无意地用于洗钱、恐怖主义融资以及其他金融犯罪活动。下面这张流程图完整地展示了从客户申请开户到账户获批后进行持续监控的全过程。
+
+第一阶段：开户启动与客户类型选择
+这个初始阶段是整个KYC流程的起点，它首先捕获客户的开户意图，然后根据其主体类型，引导他们进入相应的信息收集路径。
+* A[客户启动开户流程 (Customer Initiates Onboarding)]
+    * 目的： 这是整个KYC工作流的入口。
+    * 操作： 一位潜在客户决定在银行开立账户或使用某项金融服务。这个动作可以通过多种渠道完成，例如银行的官方网站、手机APP，或是亲临银行分行。
+    * 从A到B的箭头： 这个箭头表示，在客户表达开户意愿后，流程立即进入银行的第一个关键步骤：对客户进行分类。
+* B{选择客户类型 (Select Customer Type)}
+    * 目的： 这是一个决策节点，用于将申请人分为两大基本类别。个人客户和企业客户所需的文件和验证要求有显著差异。
+    * 操作 (系统/用户)： 系统会提示申请人（或协助办理的银行员工）声明他们是作为“个人客户”还是“企业客户”进行申请。
+    * 逻辑： 这个分支是至关重要的，因为企业账户通常带来更复杂的风险，尤其是在所有权结构和资金来源方面。
+* 从B到C和D的路径：
+    * C[个人客户 (Individual Customer)]： 如果申请人是代表自己的自然人，流程将走这条路。
+    * D[企业客户 (Business Customer)]： 如果申请人是一个法人实体（例如公司、合伙企业、有限责任公司等），流程则走另一条路。
+
+第二阶段：信息与文件收集
+这个阶段的核心任务是收集所有必要的数据和证明文件，用以证实客户的身份并了解其财务状况。
+* E[收集个人信息 (Collect Individual Information)]
+    * 目的： 从个人申请人那里收集其“个人身份信息”（Personally Identifiable Information, PII）。
+    * 操作 (用户/系统)： 客户在一个在线表单或纸质表格中输入他们的个人详细信息。系统负责捕获并存储这些信息，如法定全名、出生日期、居住地址、国籍和联系方式等。
+* F[收集企业信息] -> G[识别最终受益人 (UBOs)] -> H[收集UBO信息]
+    * 目的： 这个连续的步骤是针对非个人客户进行尽职调查的关键部分。其目标是穿透公司的法人结构，找到背后真正拥有或控制该公司的自然人。
+    * 操作 (F)： 申请人提供公司的法定名称、注册地址、税务识别号（TIN）以及工商注册详情。
+    * 操作 (G)： 系统要求申请人识别出所有的“最终受益人”（Ultimate Beneficial Owners, UBOs）。UBO通常指直接或间接拥有公司超过特定比例（例如25%）股份或投票权的，或以其他方式对公司施加重大影响的自然人。这是反洗钱的核心控制点。
+    * 操作 (H)： 对于每一位被识别出的UBO，银行必须像对待个人客户一样，收集其完整的个人信息（姓名、地址、出生日期等）。
+* I{文件收集 (Document Collection)} 子图
+    * 目的： 这个部分集中收集用于验证之前所提供信息的证明文件。
+    * 操作 (用户)： 客户上传所需文件的电子版或提供实体复印件。
+    * 子图内的节点：
+        * J[身份证明 (Identity Proof)]： 用于验证客户和/或UBO的身份。例如护照、驾照或国民身份证。
+        * K[地址证明 (Address Proof)]： 用于验证其申报的居住地址。例如近期的水电费账单、银行对账单或租赁协议。
+        * L[财务信息 (Financial Information)]： 用于了解客户的财务背景和资金来源。这可能包括近期的工资单、收入证明或财富来源声明，这些信息有助于构建其风险画像。
+
+第三阶段：验证与筛查
+在所有信息收集完毕后，银行启动核心的验证与筛查程序，以确认文件的真实性，并将客户信息与全球的观察名单进行比对。
+* M{身份验证 (Identity Verification)}
+    * 目的： 此节点标志着银行主动验证工作的开始。
+    * 操作 (系统)： 系统整合所有收集到的数据和文件，准备启动验证检查。
+* N[验证文件真实性 (Verify Document Authenticity)]
+    * 目的： 确保客户提交的文件是真实有效的，未经伪造或篡改。
+    * 操作 (系统/人工)： 这个过程可以是自动化的，使用人工智能工具检查文件的防伪特征（如全息图）、数据一致性和图像完整性；也可以由后台团队进行人工审核。
+* O{文件是否有效? (Is Document Valid?)}
+    * 目的： 基于文件真实性检查结果的一个关键决策点。
+    * 逻辑 (决策标准)： 如果文件已过期、模糊不清、有涂改痕迹，或未能通过自动安全检查，则被视为无效。
+    * “否(No)”路径 -> P[要求补充/有效文件 (Request for Additional/Valid Documents)]： 如果文件验证失败，流程将暂停。系统（或银行员工）会通知客户，说明问题所在，并要求其重新提交有效的文件。这就形成了一个返回文件收集阶段的循环，确保申请不会在错误信息的基础上继续进行。
+    * “是(Yes)”路径 -> Q[制裁/反洗钱名单筛查 (Screen against Sanctions/AML Lists)]： 如果所有文件都被确认为真实有效，流程进入下一步的筛查阶段。
+* Q[制裁/反洗钱名单筛查]
+    * 目的： 检查客户（或UBOs）是否是已知的“高风险个人”，或是否与非法活动有关联。
+    * 操作 (系统)： 客户的详细信息会自动与多个数据库和观察名单进行比对，包括：
+        * 制裁名单 (Sanctions Lists)： 如联合国、美国财政部（OFAC）、欧盟等发布的名单，用于识别被禁止进行金融交易的个人或实体。
+        * 政治公众人物 (PEP) 名单： 用于识别担任重要公共职务的个人，因为他们通常被认为具有更高的贿赂和腐败风险。
+        * 负面媒体 (Adverse Media)： 搜索与客户相关的负面新闻，这些新闻可能暗示其参与了金融犯罪。
+
+第四阶段：风险评估与尽职调查
+根据筛查结果和其他数据，银行为客户分配一个风险等级，这个等级将决定其后续受到的审查严格程度。
+* R{是否匹配? (Match Found?)}
+    * 目的： 根据筛查结果，决定下一步的操作。
+    * 逻辑 (决策标准)： 如果客户的姓名或其他信息在任何一个筛查名单上产生了潜在的“命中”或匹配，决策为“是(Yes)”。“否(No)”则意味着客户没有触碰任何即时的危险信号。
+    * “否(No)”路径 -> Y{风险定级 (Risk Profiling)}： 如果没有发现任何匹配，客户将进入标准的风险定级评估流程。
+    * “是(Yes)”路径 -> S[强化尽职调查 (EDD)]： 任何潜在的匹配都会自动将案件升级。这条路径用于处理需要人工介入的高风险情景。
+* 强化尽职调查 (EDD) 路径: S -> T -> U -> V
+    * S[强化尽职调查 (EDD)]： 启动一个更为深入的调查程序。
+    * T[收集额外信息 (Gather Additional Information)]： 合规分析师可能会要求客户提供更详细的信息，例如财富来源的证明、开户目的的详细说明，或对其业务性质的澄清。
+    * U[合规团队人工审核 (Manual Review by Compliance Team)]： 合规官会审查整个案件档案——包括初始信息、名单命中结果以及任何补充文件——以确定这个“命中”是否为真，并评估其整体风险。
+    * V{是否为高风险? (High Risk?)}： 这是合规团队在完成EDD后做出的最终判断。
+        * “是(Yes)”路径 -> W[拒绝申请 (Reject Application)]： 如果风险被确认为真实且银行无法接受（例如，客户确实在制裁名单上），申请将被拒绝。
+        * “否(No)”路径 -> X[有条件批准 (Conditional Approval)]： 如果风险是可控的（例如，客户只是一个低级别的PEP），合规官可能会批准开户，但会附加特定条件或限制，如交易限额。
+* Y{风险定级 (Risk Profiling)} 子图
+    * 目的： 为每一位客户（即使是没有命中名单的客户）分配一个风险评级（低、中、高）。这个评级将决定未来对其监控的强度。
+    * Z[分析客户数据 (Analyze Customer Data)]： 一个自动化的风险引擎会根据客户的居住国/经营国、职业/行业、预期的交易模式和资金来源等因素为其打分。
+    * AA{分配风险等级 (Assign Risk Level)}： 系统根据分数将客户分类。
+        * AB[低风险] / AC[中风险]： 这些客户被视为标准客户，直接进入最终决策阶段。
+        * AD[高风险]： 一个客户即使没有命中任何制裁名单，也可能被归为高风险（例如，他是PEP或从事高风险行业）。这条路径正确地将其引导回 S[强化尽职调查 (EDD)]，因为所有高风险客户，无论如何被识别出来，都必须接受这种更深层次的审查。
+
+第五阶段：最终决定与账户激活
+这是开户流程的收尾阶段，银行将做出最终决定并通知客户。
+* AE{最终决定 (Decision)}
+    * 目的： 这是最后的关卡。它汇总了来自标准路径（低/中风险）和有条件批准路径的所有信息，以做出最终裁决。
+    * “批准(Approve)”路径 -> AF[账户获批并激活 (Account Approved & Activated)]： 对于所有成功的申请，账户被正式开立。客户会收到通知，并获得访问其新账户和相关服务的权限。
+    * “拒绝(Reject)”路径 -> W[拒绝申请 (Reject Application)]： 对于任何最终被拒绝的申请（无论是通过EDD流程还是因其他政策原因），银行将终止与该客户建立关系。
+
+第六阶段：持续监控
+KYC不是一次性的动作，而是一个持续的过程。这个最后阶段确保银行在客户关系的整个生命周期内，持续监控其活动，以侦测任何风险变化。
+* AG[持续监控 (Ongoing Monitoring)]
+    * 目的： 体现了监控工作的持续性和周期性。
+    * AH{交易监控 (Transaction Monitoring)}： 自动化系统实时监控客户的交易，以发现与其已知背景不符的活动（例如，异常大额的资金往来、与高风险国家/地区的交易等）。
+    * “可疑活动(Suspicious Activity)”路径 -> AI[提交可疑活动报告 (File Suspicious Activity Report - SAR)]： 如果一笔交易被标记，并且经过调查后确认其可疑，银行有法律义务向相关金融情报机构提交“可疑活动报告”。这一行为会接着导向 AJ[审核并更新风险画像]，因为这类事件几乎总会提升客户的风险等级。
+    * AK{定期审查 (Periodic Review)}： 银行会周期性地重新评估客户的档案。高风险客户的审查频率远高于低风险客户。如果客户情况发生变化（例如，客户成为了PEP），其风险画像将在 AJ 处被更新，这可能会触发更严格的监控措施。如果情况没有变化，则监控循环继续。
