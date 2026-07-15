@@ -1,0 +1,46 @@
+name: Validate diagrams
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Format, validate, and render
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check source quality and Mermaid syntax
+        run: pnpm run check
+
+      - name: Regenerate committed previews
+        run: pnpm run render:diagrams
+
+      - name: Verify previews are current
+        run: |
+          if [ -n "$(git status --porcelain -- assets/previews)" ]; then
+            echo "Generated previews are missing or out of date."
+            git status --short -- assets/previews
+            exit 1
+          fi

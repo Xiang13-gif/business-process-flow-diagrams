@@ -1,0 +1,34 @@
+name: Diagram request
+description: Propose a new illustrative process diagram or companion guide.
+title: "[Request]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        New diagrams should be generic or supported by public, primary sources. Do not submit customer, confidential, or security-sensitive information.
+  - type: input
+    id: domain
+    attributes:
+      label: Domain
+      placeholder: Lending, payments, onboarding, security, or SME banking
+    validations:
+      required: true
+  - type: textarea
+    id: scenario
+    attributes:
+      label: Scenario and intended audience
+      description: What decision or conversation should this diagram help with?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Proposed flow and exception paths
+      description: List the expected phases, major decisions, and terminal outcomes.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public sources or review basis
+      description: Link primary sources or explain how the generic example will be reviewed.

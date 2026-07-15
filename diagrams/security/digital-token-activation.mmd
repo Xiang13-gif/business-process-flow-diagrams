@@ -1,0 +1,70 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+graph TD
+    accTitle: Digital token activation
+    accDescr: Conceptual digital token activation showing step-up verification, retry controls, device binding, optional biometrics, and confirmation.
+
+    %% === STAGE 1: INITIATION ===
+    subgraph Initiation and Login
+        A[User Logs into Mobile Banking App <br> using Username and Password]
+        B[User Navigates to Security Settings]
+        C[Selects 'Activate Digital Token']
+    end
+
+    A --> B --> C
+
+    %% === STAGE 2: IDENTITY VERIFICATION (MFA) ===
+    subgraph Multi-Factor Verification
+        D[System Prompts for Additional Verification]
+        E[Sends Verification Code OTP <br> to Registered SMS or Email]
+        F[User Enters Received OTP]
+        G{Is OTP Correct and Valid?}
+        H[Display Error and Decrement Retry Counter]
+        H1{Attempts Remain and Code Not Expired?}
+        H2[Lock Activation and Direct User to Support]
+    end
+
+    C --> D --> E --> F --> G
+    G -- No --> H
+    H --> H1
+    H1 -- Yes --> F
+    H1 -- No --> H2
+
+    %% === STAGE 3: DEVICE BINDING AND LOCAL CREDENTIALS ===
+    subgraph Device Binding and PIN Setup
+        I[Identity Verified, Proceed to Binding <br> System registers unique device identifiers]
+        J[User Sets a Secure PIN for Digital Token]
+        K[User Confirms the Secure PIN]
+        L{Do PINs Match?}
+        M{Enable Biometric Authentication?}
+        M1[Enable Biometric Authentication]
+    end
+    
+    G -- Yes --> I
+    I --> J --> K --> L
+    L -- No --> J
+    L -- Yes --> M
+
+    %% === STAGE 4: FINAL ACTIVATION AND CONFIRMATION ===
+    subgraph Activation and Confirmation
+        N[System Completes Secure Token Provisioning]
+        O[Digital Token Successfully Activated]
+        P[Display Confirmation and Usage Info <br> Explains new transaction signing flow]
+        Q[Send Activation Confirmation through Configured Notification Channel]
+        END[End]
+    end
+
+    M -- Yes --> M1
+    M -- Skip --> N
+    M1 --> N
+    N --> O
+    O --> P
+    P --> Q
+    Q --> END
+    H2 --> END
+
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class O,Q success
+    class H2 exception
+    class END terminal

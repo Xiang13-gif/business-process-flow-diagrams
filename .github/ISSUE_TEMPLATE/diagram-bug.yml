@@ -1,0 +1,36 @@
+name: Diagram issue
+description: Report an incorrect, unclear, broken, or inaccessible diagram.
+title: "[Diagram]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include customer data, credentials, confidential process details, or security-sensitive information.
+  - type: input
+    id: diagram
+    attributes:
+      label: Diagram path
+      description: Which Mermaid source or preview is affected?
+      placeholder: diagrams/payments/corporate-single-payment.mmd
+    validations:
+      required: true
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is unclear or incorrect?
+      description: Identify the node, branch, label, visual issue, or rendering problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Suggested outcome
+      description: Explain the expected modelling or rendering behaviour and any source basis.
+  - type: dropdown
+    id: contribution
+    attributes:
+      label: Can you help fix it?
+      options:
+        - I can open a pull request.
+        - I can clarify the process but cannot contribute code.
+        - I am not able to help further.

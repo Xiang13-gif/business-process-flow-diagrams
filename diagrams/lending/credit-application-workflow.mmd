@@ -1,0 +1,57 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Credit application workflow
+    accDescr: Conceptual credit application workflow from prescreening through multi-tier approval and conditional offer issuance.
+
+    subgraph "Phase 1: Portfolio & Prescreening"
+        A[Start] --> B[Create Business Portfolio]
+        B --> C[Initiate New Loan Application]
+        C --> D[Created Prescreening Stage]
+        D --> E[Automated Business Rules and Sanctions Check]
+        E --> F{Prescreening Decision}
+        F -- Pass --> G[Prescreening Passed]
+        F -- Refer --> R{Manual Review Decision}
+        R -- Continue --> G
+        R -- Decline --> Z[Application Not Progressed]
+    end
+
+    subgraph "Phase 2: Data Entry and Analysis"
+        G --> H[Data Entry Stage]
+        H --> I[Applicant Submits Documents: Financials, Business Plan, Legal Docs]
+        I --> J[Credit Analyst Validates Completeness]
+        J --> K{Information Complete?}
+        K -- No --> L[Request for Additional Information]
+        L --> I
+        K -- Yes --> M[Prepare Credit Assessment Package]
+    end
+
+    subgraph "Phase 3: Multi-Tiered Approval"
+        M --> N[Approval Stage 1 - Junior Underwriter]
+        N --> O{Decision 1}
+        O -- Approve and Escalate --> P[Approval Stage 2 - Senior Underwriter]
+        O -- Reject --> Z
+        O -- RFI --> L
+        
+        P --> Q{Decision 2}
+        Q -- Approve and Escalate --> R2[Approval Stage 3 - Credit Committee]
+        Q -- Reject --> Z
+        Q -- RFI --> L
+
+        R2 --> S{Final Committee Decision}
+        S -- Approve --> T[Application Approved Subject to Conditions]
+        S -- Reject --> Z
+        S -- RFI --> L
+    end
+
+    subgraph "Phase 4: Finalization"
+        T --> U[Issue Conditional Offer Letter]
+        U --> V[End of this Flow]
+        Z --> V
+    end
+
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class T success
+    class Z exception
+    class V terminal

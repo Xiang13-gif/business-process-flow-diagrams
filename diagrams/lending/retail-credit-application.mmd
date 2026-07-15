@@ -1,0 +1,65 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+graph TD
+    accTitle: Retail credit application
+    accDescr: Conceptual retail credit application journey from inquiry and assessment through approval, offer, disbursement, and account activation.
+
+    subgraph "Phase 1: Application Initiation & Pre-Screening"
+        A[Start] --> B{Customer Inquiry: Online, Branch, or Mobile App}
+        B --> C[Loan Product Selection and Eligibility Check]
+        C --> D{Basic Pre-Screening}
+        D -- Meets Basic Criteria --> E[Proceed to Application]
+        D -- Does Not Meet --> F[Initial Rejection]
+    end
+
+    subgraph "Phase 2: Formal Application & Data Entry"
+        E --> G[Application Form Submission]
+        G --> H[Upload Documents: MyKad, Payslip, Bank Statement, Booking Form]
+        H --> I[System Data Entry and Application Creation]
+    end
+
+    subgraph "Phase 3: Credit Assessment & Verification"
+        I --> J[Automated CCRIS and CTOS Checks]
+        J --> K[Debt Service Ratio - DSR Calculation]
+        K --> L{Initial System Recommendation}
+        L -- Proceed --> M[Verify Documents and Income]
+        L -- High Risk or Fail --> N[Application Rejected by System]
+        M --> O{Information Complete and Verified?}
+        O -- Yes --> P[Credit Analyst or Officer Review]
+        O -- No --> Q[Request Additional Info from Customer]
+        Q --> H
+    end
+
+    subgraph "Phase 4: Underwriting & Approval"
+        P --> R[Underwriter Recommendation and Risk Grading]
+        R --> S{Approval Level 1 - Branch Manager}
+        S -- Approved Within Authority --> V[Final Loan Approval]
+        S -- Rejected --> U[Application Rejected by Underwriter]
+        S -- Escalate --> T
+        T -- Approved --> V[Final Loan Approval]
+        T -- Rejected --> U
+    end
+
+    subgraph "Phase 5: Offer, Legal & Disbursement"
+        V --> W[Issue Letter of Offer]
+        W --> X{Customer Accepts Offer?}
+        X -- Yes --> Y[Sign Agreement and Legal Docs]
+        X -- No --> Z[Offer Lapsed or Rejected by Customer]
+        Y --> AA[Final Checks and Credit Limit Setup]
+        AA --> BB[Loan Disbursement]
+    end
+    
+    subgraph "End Points"
+        F --> End[End]
+        N --> End
+        U --> End
+        Z --> End
+        BB --> CC[Loan Account Activated]
+        CC --> End
+    end
+
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class V,CC success
+    class F,N,U,Z exception
+    class End terminal
