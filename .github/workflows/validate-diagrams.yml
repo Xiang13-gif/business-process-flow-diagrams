@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   validate:
-    name: Format, validate, and render
+    name: Validate diagram library
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -31,16 +31,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check source quality and Mermaid syntax
+      - name: Check source, preview, and Mermaid quality
         run: pnpm run check
-
-      - name: Regenerate committed previews
-        run: pnpm run render:diagrams
-
-      - name: Verify previews are current
-        run: |
-          if [ -n "$(git status --porcelain -- assets/previews)" ]; then
-            echo "Generated previews are missing or out of date."
-            git status --short -- assets/previews
-            exit 1
-          fi

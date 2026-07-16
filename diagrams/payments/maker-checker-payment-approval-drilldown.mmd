@@ -1,0 +1,51 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+sequenceDiagram
+    accTitle: Maker-checker payment approval drill-down
+    accDescr: Illustrative dual-control payment approval sequence showing maker validation, independent checker review, mandate escalation, approval expiry, correction loops, rejection, and controlled release to execution.
+
+    autonumber
+    participant Maker
+    participant Portal as Payment Portal
+    participant Checker
+    participant Approver as Additional Approver
+    participant Execution as Execution Service
+
+    loop Until the draft passes maker validation
+        Maker->>Portal: Create or correct payment draft
+        Portal->>Portal: Validate required fields and payment rules
+        alt Validation fails
+            Portal-->>Maker: Return required corrections
+        else Validation passes
+            Portal-->>Maker: Confirm draft can be submitted
+        end
+    end
+
+    Maker->>Portal: Submit instruction and supporting information
+    Portal->>Portal: Set status to pending approval
+    alt Approval window expires
+        Portal-->>Maker: Expire instruction and notify maker
+    else Approval window remains open
+        Portal->>Checker: Assign instruction to an eligible independent checker
+        Checker->>Portal: Review instruction, support, and mandate
+        alt Checker returns the instruction
+            Portal-->>Maker: Return draft with review comments
+        else Checker rejects the instruction
+            Portal-->>Maker: Reject instruction and provide status
+        else Checker approves within authority
+            Portal->>Execution: Release approved instruction to execution queue
+            Execution-->>Portal: Record controlled execution status
+            Portal-->>Maker: Confirm instruction is ready for execution
+        else Additional approval is required
+            Portal->>Approver: Route instruction for additional approval
+            Approver->>Portal: Review mandate and instruction
+            alt Additional approver returns the instruction
+                Portal-->>Maker: Return draft with review comments
+            else Additional approver rejects the instruction
+                Portal-->>Maker: Reject instruction and provide status
+            else Additional approver approves
+                Portal->>Execution: Release approved instruction to execution queue
+                Execution-->>Portal: Record controlled execution status
+                Portal-->>Maker: Confirm instruction is ready for execution
+            end
+        end
+    end

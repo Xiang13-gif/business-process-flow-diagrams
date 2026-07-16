@@ -1,0 +1,58 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: KYC screening and enhanced due-diligence drill-down
+    accDescr: Illustrative screening and enhanced due-diligence flow showing data-quality remediation, potential-match investigation, risk escalation, approval, rejection, and hold outcomes.
+
+    P1([Phase 1: Case readiness]) --> START[Start screening case]
+    START --> COLLECT[Collect customer and ownership information]
+    COLLECT --> COMPLETE{Required information complete?}
+    COMPLETE -- No --> REQUEST[Request missing or corrected information]
+    REQUEST --> COLLECT
+    COMPLETE -- Yes --> NORMALIZE[Normalize names, identifiers, and ownership data]
+
+    NORMALIZE --> P2([Phase 2: Screening and match triage])
+    P2 --> SCREEN[Run sanctions, PEP, and adverse-media screening]
+    SCREEN --> RESULT{Potential match identified?}
+    RESULT -- No --> BASELINE[Record clear-screening result]
+    RESULT -- Yes --> HOLD[Place case on review hold]
+    HOLD --> INVESTIGATE[Investigate identifiers, ownership, and context]
+    INVESTIGATE --> CONFIRMED{Match confirmed?}
+    CONFIRMED -- Yes --> ESCALATE[Escalate to the appropriate control owner]
+    ESCALATE --> EXIT_SCREENING[Close or exit the case with documented rationale]
+    CONFIRMED -- No --> BASELINE
+    CONFIRMED -- Inconclusive --> MORE_EVIDENCE[Request additional evidence or documentation]
+    MORE_EVIDENCE --> INVESTIGATE
+
+    BASELINE --> P3([Phase 3: Risk assessment and enhanced due diligence])
+    P3 --> ASSESS[Assess customer, product, geography, and transaction risk]
+    ASSESS --> RISK{Enhanced due diligence required?}
+    RISK -- No --> STANDARD_REVIEW[Complete standard due-diligence review]
+    RISK -- Yes --> EDD_COLLECT[Collect source-of-funds, source-of-wealth, and ownership evidence]
+    EDD_COLLECT --> EDD_COMPLETE{Evidence sufficient?}
+    EDD_COMPLETE -- No --> EDD_REQUEST[Request or refresh supporting evidence]
+    EDD_REQUEST --> EDD_COLLECT
+    EDD_COMPLETE -- Yes --> EDD_REVIEW[Perform enhanced due-diligence review]
+    EDD_REVIEW --> EDD_OUTCOME{Residual risk acceptable?}
+    EDD_OUTCOME -- No --> EXIT_RISK[Decline or exit the relationship]
+    EDD_OUTCOME -- Yes --> APPROVAL_REVIEW[Submit for required approval]
+    STANDARD_REVIEW --> APPROVAL_REVIEW
+
+    APPROVAL_REVIEW --> P4([Phase 4: Decision and recordkeeping])
+    P4 --> DECISION{Approval decision}
+    DECISION -- Approve --> APPROVED[Approve onboarding or continuation]
+    DECISION -- Approve with conditions --> CONDITIONS[Record conditions and review date]
+    CONDITIONS --> APPROVED
+    DECISION -- Reject --> EXIT_DECISION[Close the case with documented rationale]
+    APPROVED --> RECORD[Record rationale, evidence, and monitoring requirements]
+    RECORD --> ACTIVE[Case ready for onboarding or ongoing monitoring]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3,P4 phase
+    class HOLD,ESCALATE,EDD_REVIEW,APPROVAL_REVIEW control
+    class EXIT_SCREENING,EXIT_RISK,EXIT_DECISION exception
+    class APPROVED success
+    class ACTIVE terminal

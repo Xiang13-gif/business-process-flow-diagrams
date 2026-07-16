@@ -16,7 +16,16 @@ Every `.mmd` file must include:
 2. An `accTitle` that identifies the flow in one short phrase.
 3. An `accDescr` that describes the key journey and outcomes in plain language.
 
-The validation script enforces the accessibility metadata and renders every file to catch Mermaid syntax errors.
+The validation scripts enforce accessibility metadata, render every source to catch Mermaid syntax errors, and verify that each committed SVG preview carries the stable hash of its Mermaid source.
+
+## Choose the right diagram type
+
+- Use a **flowchart** for actions, decisions, exceptions, and process phases.
+- Use a **sequence diagram** when the important question is which actor or system sends, reviews, or returns an instruction.
+- Use a **state diagram** when an item's allowed lifecycle states and transitions matter more than the individual tasks.
+- Use a **context or data-lineage diagram** to show system boundaries, interfaces, data products, and control points.
+
+Keep one question per diagram. For a dense process, pair a high-level flow with a drill-down, a state model, or an interaction sequence instead of forcing every detail into one graph.
 
 ## Modeling conventions
 

@@ -1,5 +1,14 @@
 import { spawn } from "node:child_process";
-import { access, mkdir, readdir, readFile, rm, stat } from "node:fs/promises";
+import { createHash } from "node:crypto";
+import {
+  access,
+  mkdir,
+  readdir,
+  readFile,
+  rm,
+  stat,
+  writeFile,
+} from "node:fs/promises";
 import { constants } from "node:fs";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -39,6 +48,14 @@ export async function readDiagram(path) {
   return readFile(path, "utf8");
 }
 
+export function sourceHash(source) {
+  return createHash("sha256").update(source, "utf8").digest("hex");
+}
+
+export async function sourceHashForFile(path) {
+  return sourceHash(await readDiagram(path));
+}
+
 export function outputPathFor(sourcePath, outputDirectory) {
   const sourceRelativePath = relative(diagramDirectory, sourcePath);
   return join(outputDirectory, sourceRelativePath.replace(/\.mmd$/, ".svg"));
@@ -64,7 +81,11 @@ async function run(command, args) {
   });
 }
 
-export async function renderDiagrams({ outputDirectory, clean = false }) {
+export async function renderDiagrams({
+  outputDirectory,
+  clean = false,
+  concurrency = 4,
+}) {
   const renderer = mmdcPath();
   await access(renderer, constants.X_OK);
 
@@ -73,9 +94,9 @@ export async function renderDiagrams({ outputDirectory, clean = false }) {
   }
 
   const sources = await findDiagrams();
-  const outputs = [];
+  const outputs = new Array(sources.length);
 
-  for (const source of sources) {
+  async function renderSource(source, index) {
     const output = outputPathFor(source, outputDirectory);
     await mkdir(dirname(output), { recursive: true });
     await run(renderer, [
@@ -93,7 +114,29 @@ export async function renderDiagrams({ outputDirectory, clean = false }) {
     if (renderedFile.size === 0) {
       throw new Error(`Mermaid rendered an empty file for ${source}.`);
     }
-    outputs.push(output);
+
+    const svg = await readFile(output, "utf8");
+    const hash = await sourceHashForFile(source);
+    await writeFile(output, `<!-- source-sha256: ${hash} -->\n${svg}`);
+    outputs[index] = output;
+  }
+
+  let nextSourceIndex = 0;
+  const workerCount = Math.min(Math.max(1, concurrency), sources.length);
+  await Promise.all(
+    Array.from({ length: workerCount }, async () => {
+      while (nextSourceIndex < sources.length) {
+        const sourceIndex = nextSourceIndex;
+        nextSourceIndex += 1;
+        await renderSource(sources[sourceIndex], sourceIndex);
+      }
+    }),
+  );
+
+  if (outputs.some((output) => !output)) {
+    throw new Error(
+      "Mermaid rendering did not produce every expected preview.",
+    );
   }
 
   return outputs;

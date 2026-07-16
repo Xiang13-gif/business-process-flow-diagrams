@@ -46,6 +46,15 @@ Illustrative handoff from loan origination and underwriting into account setup, 
 - [SVG preview](../assets/previews/lending/loan-origination-to-servicing.svg)
 - [Companion guide](explanations/lending/loan-origination-to-servicing.md)
 
+### Loan origination to servicing handoff drill-down
+
+Detailed control-focused view of the approved-application handoff: conditions, documentation, booking, reconciliation, disbursement release, and servicing activation.
+
+- [Mermaid source](../diagrams/lending/loan-origination-to-servicing-handoff-drilldown.mmd)
+- [SVG preview](../assets/previews/lending/loan-origination-to-servicing-handoff-drilldown.svg)
+- [Parent flow](../diagrams/lending/loan-origination-to-servicing.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
 ## Identity and security
 
 ### KYC onboarding
@@ -55,6 +64,15 @@ Customer onboarding with data collection, document verification, screening, enha
 - [Mermaid source](../diagrams/identity/kyc-onboarding.mmd)
 - [SVG preview](../assets/previews/identity/kyc-onboarding.svg)
 - [Companion guide](explanations/identity/kyc-onboarding.md)
+
+### KYC screening and enhanced due-diligence drill-down
+
+Detailed case flow for data remediation, screening-match triage, enhanced due diligence, risk acceptance, and documented closure.
+
+- [Mermaid source](../diagrams/identity/kyc-screening-and-edd-drilldown.mmd)
+- [SVG preview](../assets/previews/identity/kyc-screening-and-edd-drilldown.svg)
+- [Parent flow](../diagrams/identity/kyc-onboarding.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
 
 ### Digital-token activation
 
@@ -82,6 +100,45 @@ Manual corporate payment from payee entry through maker-checker approval, screen
 - [SVG preview](../assets/previews/payments/corporate-single-payment.svg)
 - [Companion guide](explanations/payments/corporate-single-payment.md)
 
+### Maker-checker payment approval drill-down
+
+Detailed dual-control view of payment preparation, independent review, approval limits, expiry, escalation, and controlled release.
+
+- [Mermaid source](../diagrams/payments/maker-checker-payment-approval-drilldown.mmd)
+- [SVG preview](../assets/previews/payments/maker-checker-payment-approval-drilldown.svg)
+- [Parent flow](../diagrams/payments/corporate-single-payment.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+## Architecture and data
+
+### Banking system context and data lineage
+
+Conceptual system view connecting customer channels, business workflows, controls, systems of record, external networks, and operational data products.
+
+- [Mermaid source](../diagrams/architecture/banking-system-context-and-data-lineage.mmd)
+- [SVG preview](../assets/previews/architecture/banking-system-context-and-data-lineage.svg)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+## State models
+
+### Credit application state machine
+
+Explicit lifecycle states for drafting, assessment, approval, offer acceptance, account activation, withdrawal, decline, and expiry.
+
+- [Mermaid source](../diagrams/states/credit-application-state-machine.mmd)
+- [SVG preview](../assets/previews/states/credit-application-state-machine.svg)
+- [Related workflow](../diagrams/lending/credit-application-workflow.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+### Corporate payment state machine
+
+Explicit lifecycle states for drafting, approval, screening, funding, network processing, settlement, return, failure, and cancellation.
+
+- [Mermaid source](../diagrams/states/corporate-payment-state-machine.mmd)
+- [SVG preview](../assets/previews/states/corporate-payment-state-machine.svg)
+- [Related workflow](../diagrams/payments/corporate-single-payment.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
 ## SME banking
 
 ### SME digital-banking journey
@@ -92,9 +149,18 @@ A high-level SME digital-banking landscape covering onboarding plus distinct pay
 - [SVG preview](../assets/previews/sme/sme-digital-banking-journey.svg)
 - [Companion guide](explanations/sme/sme-digital-banking-journey.md)
 
+## Process-design resources
+
+- [Control and exception matrix](control-and-exception-matrix.md): document control intent, evidence, and named routes for non-happy-path outcomes.
+- [Banking-process glossary](banking-glossary.md): common, illustrative terminology used across the library.
+- [Process diagram brief template](../templates/process-diagram-brief.md): frame scope, actors, assumptions, and review needs before drafting a diagram.
+- [Control and exception matrix template](../templates/control-and-exception-matrix.md): capture organisation-specific implementation details outside the illustrative library.
+- [Companion guide template](../templates/companion-guide.md): record reading notes, assumptions, references, and review status alongside a diagram.
+
 ## How to work with a diagram
 
 1. Start with the **SVG preview** for a quick visual reading.
 2. Open the **Mermaid source** when you need to revise steps, branches, or layout.
 3. Use the **companion guide** as contextual commentary, but verify its factual claims and citations before operational use.
-4. Update the source, its catalog entry, any companion guide, and generated preview together. Run `pnpm run check` and `pnpm run render:diagrams` before opening a pull request.
+4. For material decisions or exceptions, complete a control matrix and retain references in the relevant internal system.
+5. Update the source, its catalog entry, any companion guide, and generated preview together. Run `pnpm run check` and `pnpm run render:diagrams` before opening a pull request.

@@ -1,0 +1,43 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+stateDiagram-v2
+    accTitle: Corporate payment state machine
+    accDescr: Conceptual corporate payment states from maker entry through approval, screening, funding, network processing, settlement, and exception outcomes.
+
+    state "Pending Approval" as PendingApproval
+    state "Held for Review" as HeldForReview
+    state "Funding Check" as FundingCheck
+    state "Queued for Processing" as QueuedForProcessing
+    state "Sent to Network" as SentToNetwork
+
+    [*] --> Draft
+    Draft --> Submitted: maker submits
+    Draft --> Cancelled: maker cancels
+    Submitted --> PendingApproval: queued for authorizer
+    PendingApproval --> Authorized: authorizer approves
+    PendingApproval --> Rejected: authorizer rejects
+    PendingApproval --> Cancelled: maker cancels
+    Authorized --> Screening: submit for screening
+    Screening --> HeldForReview: alert or exception
+    Screening --> FundingCheck: screening clear
+    HeldForReview --> FundingCheck: review clears
+    HeldForReview --> Rejected: review rejects
+    FundingCheck --> Failed: insufficient funds or validation failure
+    FundingCheck --> QueuedForProcessing: funds available
+    QueuedForProcessing --> SentToNetwork: release for execution
+    SentToNetwork --> Processing: network acknowledges
+    Processing --> Successful: settlement confirmed
+    Processing --> Returned: returned or rejected by network
+    Successful --> [*]
+    Rejected --> [*]
+    Failed --> [*]
+    Returned --> [*]
+    Cancelled --> [*]
+
+    classDef active fill:#E8F1FB,stroke:#2563EB,color:#0F172A
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    class Draft,Submitted,Authorized,Screening,QueuedForProcessing,SentToNetwork,Processing active
+    class PendingApproval,HeldForReview,FundingCheck control
+    class Successful success
+    class Rejected,Failed,Returned,Cancelled exception
