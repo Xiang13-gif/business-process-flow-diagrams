@@ -1,0 +1,69 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+sequenceDiagram
+    accTitle: Payment dispute and chargeback management
+    accDescr: Illustrative payment-dispute sequence showing intake, eligibility and time-limit decisions, evidence rework, temporary-credit controls, chargeback response, escalation, and final outcomes.
+
+    autonumber
+    participant Customer
+    participant Case as Dispute Case Service
+    participant Operations as Account Operations
+    participant Network as Merchant or Network
+    participant Escalation as Escalation Body
+
+    Customer->>Case: Submit payment dispute and available evidence
+    Case->>Case: Register case and check applicable time limit
+    alt Time limit exceeded
+        Case-->>Customer: Explain time-limit outcome and retain case record
+        Note over Case,Customer: Terminal outcome: close out-of-time dispute
+    else Within applicable time limit
+        Case->>Operations: Review transaction, reason, and initial evidence
+        alt Resolved directly with merchant or customer
+            Operations-->>Case: Confirm refund, cancellation, or explanation
+            Case-->>Customer: Communicate agreed outcome
+            Note over Case,Customer: Terminal outcome: close as directly resolved
+        else Further assessment is required
+            alt Evidence is incomplete
+                Case->>Customer: Request missing documents or clarification
+                alt Evidence received by deadline
+                    Customer-->>Case: Supply requested information
+                else Evidence not received by deadline
+                    Case-->>Customer: Explain insufficient-evidence outcome
+                    Note over Case,Customer: Terminal outcome: close dispute
+                end
+            else Evidence is complete
+                Case->>Case: Record evidence readiness
+            end
+
+            Case->>Operations: Validate claim under applicable rules
+            alt Claim is ineligible
+                Operations-->>Case: Record ineligible-claim rationale
+                Case-->>Customer: Explain outcome and next steps
+                Note over Case,Customer: Terminal outcome: close dispute
+            else Claim is eligible
+                Operations->>Operations: Assess temporary credit or account hold
+                opt Temporary protection is approved
+                    Operations-->>Customer: Apply temporary credit or account hold
+                end
+                Operations->>Network: Submit chargeback or dispute package
+                alt No response by the applicable deadline
+                    Network-->>Operations: Apply default outcome
+                    Operations->>Case: Record final adjustment
+                else Response received
+                    Network-->>Operations: Send response and supporting evidence
+                    Operations->>Operations: Assess customer claim and response
+                    alt Customer claim is supported
+                        Operations->>Case: Uphold claim and arrange final adjustment
+                    else Customer claim is not supported
+                        alt Further escalation is permitted
+                            Operations->>Escalation: Submit controlled escalation or arbitration case
+                            Escalation-->>Operations: Return decision
+                        else Escalation is not permitted
+                            Operations->>Case: Decline claim and reverse temporary credit if appropriate
+                        end
+                    end
+                end
+                Case-->>Customer: Communicate final outcome
+                Note over Case,Customer: Terminal outcome: close with documented decision
+            end
+        end
+    end

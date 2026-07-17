@@ -1,0 +1,57 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Loan origination to servicing handoff drill-down
+    accDescr: Illustrative handoff flow from final credit approval through conditions, account setup, disbursement controls, servicing activation, and exception resolution.
+
+    P1([Phase 1: Approval finalisation]) --> START[Start approved application handoff]
+    START --> TERMS[Confirm approved amount, terms, and conditions]
+    TERMS --> OFFER[Issue offer and acceptance package]
+    OFFER --> ACCEPTED{Offer accepted within validity period?}
+    ACCEPTED -- No --> LAPSED[Close or return the application to credit]
+    ACCEPTED -- Yes --> P2([Phase 2: Documentation and conditions])
+    P2 --> CONDITIONS[Register pre-disbursement conditions]
+    CONDITIONS --> DOCUMENTS[Collect signed agreements and required evidence]
+    DOCUMENTS --> DOCS_COMPLETE{Documents complete and valid?}
+    DOCS_COMPLETE -- No --> REMEDIATE_DOCS[Request corrections or missing documents]
+    REMEDIATE_DOCS --> DOCUMENTS
+    DOCS_COMPLETE -- Yes --> CHECK_CONDITIONS[Verify conditions precedent and approval limits]
+    CHECK_CONDITIONS --> CONDITIONS_MET{All release conditions met?}
+    CONDITIONS_MET -- No --> CREDIT_EXCEPTION[Escalate unresolved condition to credit owner]
+    CREDIT_EXCEPTION --> EXCEPTION_OUTCOME{Exception approved?}
+    EXCEPTION_OUTCOME -- Yes --> CHECK_CONDITIONS
+    EXCEPTION_OUTCOME -- No --> CANCEL_BEFORE_BOOKING[Cancel approved facility before booking]
+    CONDITIONS_MET -- Yes --> HANDOFF_PACKET[Create controlled handoff package]
+
+    HANDOFF_PACKET --> P3([Phase 3: Servicing-system setup])
+    P3 --> CREATE_ACCOUNT[Create customer, facility, and account records]
+    CREATE_ACCOUNT --> RECONCILE[Reconcile booked data to approved terms]
+    RECONCILE --> SETUP_OK{Setup and reconciliation successful?}
+    SETUP_OK -- No --> SETUP_EXCEPTION[Route setup exception for correction]
+    SETUP_EXCEPTION --> CREATE_ACCOUNT
+    SETUP_OK -- Yes --> PAYMENT_SETUP[Set repayment schedule, notices, and servicing controls]
+
+    PAYMENT_SETUP --> P4([Phase 4: Disbursement release])
+    P4 --> INSTRUCTION[Prepare disbursement instruction]
+    INSTRUCTION --> RELEASE_CHECK[Verify beneficiary, amount, authority, and funding readiness]
+    RELEASE_CHECK --> RELEASED{Release authorised?}
+    RELEASED -- No --> DISBURSEMENT_HOLD[Hold instruction and investigate discrepancy]
+    DISBURSEMENT_HOLD --> HOLD_OUTCOME{Discrepancy resolved?}
+    HOLD_OUTCOME -- Yes --> RELEASE_CHECK
+    HOLD_OUTCOME -- No --> CANCEL_RELEASE[Cancel release and record the outcome]
+    RELEASED -- Yes --> DISBURSE[Disburse funds and capture confirmation]
+
+    DISBURSE --> P5([Phase 5: Servicing activation])
+    P5 --> POST_BOOKING[Post disbursement and update balances]
+    POST_BOOKING --> ACTIVATE[Activate servicing, billing, and monitoring]
+    ACTIVATE --> NOTIFY[Send confirmation and next-step notices]
+    NOTIFY --> ACTIVE[Facility active in servicing]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3,P4,P5 phase
+    class CHECK_CONDITIONS,RECONCILE,RELEASE_CHECK,CREDIT_EXCEPTION control
+    class LAPSED,CANCEL_BEFORE_BOOKING,SETUP_EXCEPTION,DISBURSEMENT_HOLD,CANCEL_RELEASE exception
+    class ACTIVE success

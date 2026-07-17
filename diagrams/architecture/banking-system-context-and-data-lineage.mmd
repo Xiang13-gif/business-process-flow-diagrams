@@ -1,0 +1,84 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart LR
+    accTitle: Banking system context and data lineage
+    accDescr: Conceptual banking-system context showing customer channels, business services, controls, core banking, and lineage into analytics, audit, and reporting data products.
+
+    subgraph External_Parties[External parties]
+        Customer[Customer or Corporate User]
+        Staff[Bank Staff]
+        Network[External Payment and Data Networks]
+    end
+
+    subgraph Channels[Channels and access]
+        Channel[Digital and Assisted Channels]
+        API[Channel and API Layer]
+        Identity[Identity and Access Service]
+        IdentityDecision{Identity and KYC Cleared?}
+    end
+
+    subgraph Business_Services[Business services]
+        ServiceChoice{Requested Banking Service}
+        Credit[Credit Origination Workflow]
+        Payment[Payment Orchestration Workflow]
+        Servicing[Account Servicing Workflow]
+        CaseManagement[Document and Case Management]
+    end
+
+    subgraph Core_and_Controls[Core processing and controls]
+        Screening[Fraud and Compliance Screening]
+        Core[Core Banking and Ledger]
+        PaymentConnector[Payment Network Connector]
+        Review[Manual Review or Decline]
+        Completed[Request Completed and Status Available]
+    end
+
+    subgraph Data_Lineage[Data lineage and downstream use]
+        Events[Operational Event Stream]
+        DataPlatform[Enterprise Data Platform]
+        Analytics[Analytics and Management Reporting]
+        Audit[Audit, Retention, and Regulatory Reporting]
+    end
+
+    Customer --> Channel
+    Staff --> Channel
+    Channel --> API --> Identity --> IdentityDecision
+    IdentityDecision -- Cleared --> ServiceChoice
+    IdentityDecision -- Not Cleared --> Review
+    Review --> Completed
+
+    ServiceChoice -- Credit --> Credit
+    ServiceChoice -- Payment --> Payment
+    ServiceChoice -- Servicing --> Servicing
+    Credit --> CaseManagement
+    Credit --> Screening
+    Payment --> Screening
+    Servicing --> Core
+    Screening -- Cleared --> Core
+    Screening -- Review Required --> Review
+    Payment --> PaymentConnector --> Network
+    PaymentConnector --> Core
+    Core --> Completed
+    Completed --> Customer
+
+    Credit -. application and decision events .-> Events
+    Payment -. payment status events .-> Events
+    CaseManagement -. document metadata .-> Events
+    Core -. account and ledger events .-> Events
+    Events --> DataPlatform
+    DataPlatform --> Analytics
+    DataPlatform --> Audit
+
+    classDef external fill:#F1F5F9,stroke:#475569,color:#0F172A
+    classDef channel fill:#DBEAFE,stroke:#2563EB,color:#1E3A8A
+    classDef system fill:#E8F1FB,stroke:#2563EB,color:#0F172A
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef data fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    class Customer,Staff,Network external
+    class Channel,API channel
+    class Identity,Credit,Payment,Servicing,CaseManagement,Core,PaymentConnector system
+    class IdentityDecision,ServiceChoice,Screening control
+    class Events,DataPlatform,Analytics,Audit data
+    class Completed success
+    class Review exception

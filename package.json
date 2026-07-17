@@ -1,0 +1,25 @@
+{
+  "name": "business-process-flow-diagrams",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Illustrative banking process diagrams maintained as Mermaid source files.",
+  "type": "module",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=11.7.0 <12"
+  },
+  "scripts": {
+    "check": "pnpm run format:check && pnpm run validate:links && pnpm run validate:diagrams && pnpm run validate:previews",
+    "format": "prettier --write . --ignore-unknown",
+    "format:check": "prettier --check . --ignore-unknown",
+    "render:diagrams": "node scripts/render-diagrams.mjs",
+    "validate:diagrams": "node scripts/validate-diagrams.mjs",
+    "validate:links": "node scripts/validate-links.mjs",
+    "validate:previews": "node scripts/validate-previews.mjs"
+  },
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "11.16.0",
+    "prettier": "3.6.2"
+  }
+}

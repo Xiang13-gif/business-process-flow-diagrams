@@ -1,0 +1,60 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Collections and hardship management
+    accDescr: Illustrative collections and hardship-management flow from missed-payment detection through customer engagement, affordability review, monitored arrangements, and case closure. It is not a collections policy or legal procedure.
+
+    P1([Phase 1: Detect and assess]) --> START[Identify missed payment or early-warning event]
+    START --> VERIFY[Verify account status, payment posting, and contact details]
+    VERIFY --> ERROR{Posting or data error found?}
+    ERROR -- Yes --> CORRECT[Correct record and notify relevant owner]
+    CORRECT --> CURRENT[Account returned to current monitoring]
+    ERROR -- No --> SEGMENT[Assess delinquency stage and applicable treatment path]
+    SEGMENT --> CONTACT[Attempt respectful customer contact]
+    CONTACT --> REACHED{Customer reached?}
+    REACHED -- No --> FOLLOW_UP[Schedule permitted follow-up and maintain contact log]
+    FOLLOW_UP --> CONTACT
+    REACHED -- Yes --> P2([Phase 2: Understand circumstances])
+
+    P2 --> DISCUSS[Discuss payment issue, support needs, and next steps]
+    DISCUSS --> HARDSHIP{Potential hardship or vulnerability disclosed?}
+    HARDSHIP -- Yes --> SUPPORT[Offer appropriate support channel and pause unsuitable action]
+    SUPPORT --> INFORMATION[Gather consented financial information and supporting evidence]
+    HARDSHIP -- No --> PROMISE[Agree short-term payment commitment where suitable]
+    PROMISE --> COMMITMENT_MET{Commitment received on time?}
+    COMMITMENT_MET -- Yes --> CURRENT
+    COMMITMENT_MET -- No --> INFORMATION
+
+    INFORMATION --> REVIEW[Review affordability, account history, and available options]
+    REVIEW --> OPTIONS{Sustainable arrangement available?}
+    OPTIONS -- Yes --> PROPOSE[Propose a documented repayment or hardship arrangement]
+    PROPOSE --> ACCEPTED{Arrangement accepted and completed?}
+    ACCEPTED -- No --> REWORK[Clarify terms, obtain missing evidence, or reassess options]
+    REWORK --> REVIEW
+    ACCEPTED -- Yes --> ACTIVATE[Activate arrangement and provide confirmation]
+    OPTIONS -- No --> ESCALATE[Escalate to specialist review or alternative resolution]
+    ESCALATE --> SPECIALIST{Alternative resolution approved?}
+    SPECIALIST -- Yes --> ACTIVATE
+    SPECIALIST -- No --> NEXT_ACTION[Record outcome and proceed under the applicable controlled path]
+
+    ACTIVATE --> P3([Phase 3: Monitor and close])
+    P3 --> MONITOR[Monitor payments, notices, and review triggers]
+    MONITOR --> PERFORMING{Arrangement performing as agreed?}
+    PERFORMING -- Yes --> CURED{Arrears cured or case resolved?}
+    CURED -- No --> MONITOR
+    CURED -- Yes --> CLOSE[Close arrangement and return account to standard servicing]
+    PERFORMING -- No --> MISSED[Place arrangement under review and contact customer]
+    MISSED --> CHANGE{Circumstances changed?}
+    CHANGE -- Yes --> REVIEW
+    CHANGE -- No --> NEXT_ACTION
+    NEXT_ACTION --> RESOLUTION[Managed resolution or escalation outcome recorded]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3 phase
+    class VERIFY,SEGMENT,REVIEW,MONITOR control
+    class FOLLOW_UP,SUPPORT,REWORK,ESCALATE,MISSED exception
+    class CURRENT,CLOSE success
+    class RESOLUTION terminal

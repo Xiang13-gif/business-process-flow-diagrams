@@ -1,0 +1,43 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+stateDiagram-v2
+    accTitle: Credit application state machine
+    accDescr: Conceptual credit application states from drafting and submission through assessment, approval, offer acceptance, booking, and exception end states.
+
+    state "Information Requested" as InformationRequested
+    state "Pending Approval" as PendingApproval
+    state "Conditionally Approved" as ConditionallyApproved
+    state "Offer Issued" as OfferIssued
+    state "Account Active" as AccountActive
+
+    [*] --> Draft
+    Draft --> Submitted: applicant submits
+    Draft --> Withdrawn: applicant withdraws
+    Submitted --> Prescreening: application registered
+    Prescreening --> InformationRequested: incomplete or referred
+    InformationRequested --> Submitted: information received
+    Prescreening --> Declined: eligibility not met
+    Prescreening --> Assessment: prescreening passed
+    Assessment --> InformationRequested: clarification required
+    Assessment --> Underwriting: assessment complete
+    Underwriting --> PendingApproval: recommendation prepared
+    Underwriting --> Declined: risk not accepted
+    PendingApproval --> ConditionallyApproved: approved
+    PendingApproval --> Declined: declined
+    ConditionallyApproved --> OfferIssued: issue offer
+    OfferIssued --> Accepted: customer accepts
+    OfferIssued --> Expired: declined or expired
+    Accepted --> AccountActive: conditions met and funds released
+    Accepted --> Withdrawn: customer withdraws
+    AccountActive --> [*]
+    Declined --> [*]
+    Withdrawn --> [*]
+    Expired --> [*]
+
+    classDef active fill:#E8F1FB,stroke:#2563EB,color:#0F172A
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    class Draft,Submitted,Prescreening,Assessment,Underwriting,Accepted active
+    class InformationRequested,PendingApproval,ConditionallyApproved,OfferIssued control
+    class AccountActive success
+    class Declined,Withdrawn,Expired exception
