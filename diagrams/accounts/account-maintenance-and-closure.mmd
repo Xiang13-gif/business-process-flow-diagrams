@@ -1,0 +1,59 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Account maintenance and closure
+    accDescr: Illustrative account servicing flow for authenticated maintenance requests and account closure, including validation, holds, corrections, settlement, and terminal outcomes.
+
+    P1([Phase 1: Request intake]) --> START[Customer submits a maintenance or closure request]
+    START --> AUTHENTICATE[Authenticate customer and verify request authority]
+    AUTHENTICATE --> AUTHENTICATED{Authority confirmed?}
+    AUTHENTICATED -- No --> REJECTED[Reject unauthorised request]
+    AUTHENTICATED -- Yes --> RECORD[Record request, instructions, and supporting evidence]
+    RECORD --> P2([Phase 2: Classify and assess request])
+
+    P2 --> CLASSIFY{Maintenance or closure request?}
+    CLASSIFY -- Maintenance --> P3([Phase 3: Maintain account])
+    P3 --> MAINTENANCE[Capture requested account or profile change]
+    MAINTENANCE --> MAINT_DOCS[Validate required evidence and customer instructions]
+    MAINT_DOCS --> MAINT_COMPLETE{Evidence complete and valid?}
+    MAINT_COMPLETE -- No --> REQUEST_MAINT_INFO[Request missing or corrected evidence]
+    REQUEST_MAINT_INFO --> MAINTENANCE
+    MAINT_COMPLETE -- Yes --> MAINT_CONTROL[Perform policy, risk, and product checks]
+    MAINT_CONTROL --> MAINT_ALLOWED{Change permitted?}
+    MAINT_ALLOWED -- No --> MAINT_DECLINED[Decline maintenance request]
+    MAINT_ALLOWED -- Yes --> APPLY_CHANGE[Apply approved account change]
+    APPLY_CHANGE --> MAINT_QA[Confirm change is recorded accurately]
+    MAINT_QA --> MAINT_OK{Change accurate?}
+    MAINT_OK -- No --> MAINT_REPAIR[Correct maintenance discrepancy]
+    MAINT_REPAIR --> APPLY_CHANGE
+    MAINT_OK -- Yes --> MAINT_NOTIFY[Send maintenance confirmation]
+    MAINT_NOTIFY --> MAINT_DONE[Maintenance completed]
+
+    CLASSIFY -- Closure --> P4([Phase 4: Close account])
+    P4 --> CLOSURE_REVIEW[Review balances, pending items, holds, and closure eligibility]
+    CLOSURE_REVIEW --> CLOSURE_READY{Eligible to close?}
+    CLOSURE_READY -- No --> CLOSURE_HOLD[Place closure on hold and state required action]
+    CLOSURE_HOLD --> HOLD_CLEARED{Hold or outstanding item cleared?}
+    HOLD_CLEARED -- Yes --> CLOSURE_REVIEW
+    HOLD_CLEARED -- No --> CLOSURE_OPEN[Keep account open and close request]
+    CLOSURE_READY -- Yes --> SETTLE[Settle balance, fees, interest, and pending transactions]
+    SETTLE --> SETTLED{Settlement complete?}
+    SETTLED -- No --> SETTLEMENT_EXCEPTION[Investigate unresolved settlement item]
+    SETTLEMENT_EXCEPTION --> CLOSURE_REVIEW
+    SETTLED -- Yes --> CLOSE[Close account, revoke access, and retain records]
+    CLOSE --> CLOSE_QA[Confirm closure status and final records]
+    CLOSE_QA --> CLOSED_OK{Closure recorded correctly?}
+    CLOSED_OK -- No --> CLOSURE_REPAIR[Correct closure record discrepancy]
+    CLOSURE_REPAIR --> CLOSE
+    CLOSED_OK -- Yes --> CLOSE_NOTIFY[Send final closure confirmation]
+    CLOSE_NOTIFY --> CLOSED[Account closed]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3,P4 phase
+    class AUTHENTICATE,MAINT_CONTROL,CLOSURE_REVIEW,SETTLE,CLOSE_QA control
+    class REQUEST_MAINT_INFO,MAINT_REPAIR,CLOSURE_HOLD,SETTLEMENT_EXCEPTION,CLOSURE_REPAIR exception
+    class MAINT_DONE,CLOSED success
+    class REJECTED,MAINT_DECLINED,CLOSURE_OPEN terminal

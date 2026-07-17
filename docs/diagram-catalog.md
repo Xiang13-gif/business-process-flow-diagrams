@@ -55,6 +55,45 @@ Detailed control-focused view of the approved-application handoff: conditions, d
 - [Parent flow](../diagrams/lending/loan-origination-to-servicing.mmd)
 - [Control and exception matrix](control-and-exception-matrix.md)
 
+### Collections and hardship management
+
+Illustrative arrears-management journey covering early identification, customer engagement, affordability review, relief or recovery routes, monitoring, and closure.
+
+- [Mermaid source](../diagrams/lending/collections-and-hardship-management.mmd)
+- [SVG preview](../assets/previews/lending/collections-and-hardship-management.svg)
+- [Related lifecycle](../diagrams/lending/loan-lifecycle.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+## Accounts
+
+### Retail account opening and activation
+
+Generic retail-account journey from application and due diligence through account setup, first funding, channel enrolment, and activation.
+
+- [Mermaid source](../diagrams/accounts/retail-account-opening-and-activation.mmd)
+- [SVG preview](../assets/previews/accounts/retail-account-opening-and-activation.svg)
+- [Related KYC flow](../diagrams/identity/kyc-onboarding.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+### Account maintenance and closure
+
+Generic account-servicing flow for a customer request, entitlement checks, final-balance handling, closure controls, confirmation, and records retention.
+
+- [Mermaid source](../diagrams/accounts/account-maintenance-and-closure.mmd)
+- [SVG preview](../assets/previews/accounts/account-maintenance-and-closure.svg)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+## Cards
+
+### Credit-card application and activation
+
+Generic card journey from application and assessment through account setup, card delivery, secure activation, and exception routes.
+
+- [Mermaid source](../diagrams/cards/credit-card-application-and-activation.mmd)
+- [SVG preview](../assets/previews/cards/credit-card-application-and-activation.svg)
+- [Related credit application](../diagrams/lending/retail-credit-application.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
 ## Identity and security
 
 ### KYC onboarding
@@ -82,6 +121,14 @@ Illustrative step-up verification and device-binding journey for activation of a
 - [SVG preview](../assets/previews/security/digital-token-activation.svg)
 - [Companion guide](explanations/security/digital-token-activation.md)
 
+### Fraud-alert investigation and resolution
+
+Generic fraud-alert case flow from detection through triage, customer contact, evidence review, protective action, decision, remediation, and closure.
+
+- [Mermaid source](../diagrams/security/fraud-alert-investigation-and-resolution.mmd)
+- [SVG preview](../assets/previews/security/fraud-alert-investigation-and-resolution.svg)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
 ## Payments
 
 ### Corporate bulk payment
@@ -107,6 +154,25 @@ Detailed dual-control view of payment preparation, independent review, approval 
 - [Mermaid source](../diagrams/payments/maker-checker-payment-approval-drilldown.mmd)
 - [SVG preview](../assets/previews/payments/maker-checker-payment-approval-drilldown.svg)
 - [Parent flow](../diagrams/payments/corporate-single-payment.mmd)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+### Payment dispute and chargeback management
+
+Generic payment-dispute case flow from intake and evidence collection through eligibility, investigation, representment or chargeback action, outcome notification, and closure.
+
+- [Mermaid source](../diagrams/payments/payment-dispute-and-chargeback-management.mmd)
+- [SVG preview](../assets/previews/payments/payment-dispute-and-chargeback-management.svg)
+- [Control and exception matrix](control-and-exception-matrix.md)
+
+## Trade finance
+
+### Documentary credit issuance and settlement
+
+Generic documentary-credit journey from applicant request and issuance through shipment-document review, compliant or discrepant handling, settlement, and closure.
+
+- [Mermaid source](../diagrams/trade/documentary-credit-issuance-and-settlement.mmd)
+- [SVG preview](../assets/previews/trade/documentary-credit-issuance-and-settlement.svg)
+- [Related SME journey](../diagrams/sme/sme-digital-banking-journey.mmd)
 - [Control and exception matrix](control-and-exception-matrix.md)
 
 ## Architecture and data

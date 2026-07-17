@@ -1,0 +1,60 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Credit card application and activation
+    accDescr: Illustrative credit card journey from application and document collection through screening, credit decision, card delivery, activation, and exception resolution.
+
+    P1([Phase 1: Application intake]) --> START[Customer starts a credit card application]
+    START --> DETAILS[Capture application, income, and contact details]
+    DETAILS --> CONSENT[Record required disclosures and customer consent]
+    CONSENT --> DOCUMENTS[Collect identity and supporting documents]
+    DOCUMENTS --> COMPLETE{Application complete?}
+    COMPLETE -- No --> REQUEST_INFO[Request missing or corrected information]
+    REQUEST_INFO --> SUPPLIED{Information supplied before deadline?}
+    SUPPLIED -- Yes --> DOCUMENTS
+    SUPPLIED -- No --> WITHDRAWN[Close incomplete application]
+    COMPLETE -- Yes --> P2([Phase 2: Screening and credit decision])
+
+    P2 --> VERIFY[Verify identity, documents, and application data]
+    VERIFY --> SCREEN[Perform required fraud, compliance, and credit screening]
+    SCREEN --> SCREEN_CLEAR{Screening outcome acceptable?}
+    SCREEN_CLEAR -- No --> MANUAL_REVIEW[Route application for specialist review]
+    MANUAL_REVIEW --> REVIEW_CLEAR{Review cleared?}
+    REVIEW_CLEAR -- Yes --> UNDERWRITE
+    REVIEW_CLEAR -- No --> DECLINED[Decline application and record outcome]
+    SCREEN_CLEAR -- Yes --> UNDERWRITE[Assess affordability and proposed credit terms]
+    UNDERWRITE --> APPROVED{Application approved?}
+    APPROVED -- No --> DECLINED
+    APPROVED -- Yes --> OFFER[Issue approved card offer and terms]
+    OFFER --> ACCEPTED{Offer accepted within validity period?}
+    ACCEPTED -- No --> OFFER_EXPIRED[Close unaccepted offer]
+    ACCEPTED -- Yes --> P3([Phase 3: Issue and activate card])
+
+    P3 --> ACCOUNT_SETUP[Create card account and configure approved controls]
+    ACCOUNT_SETUP --> ISSUE[Produce and dispatch card using approved delivery method]
+    ISSUE --> DELIVERED{Card delivery confirmed?}
+    DELIVERED -- No --> DELIVERY_EXCEPTION[Investigate delivery exception or arrange reissue]
+    DELIVERY_EXCEPTION --> ISSUE
+    DELIVERED -- Yes --> ACT_REQUEST[Receive cardholder activation request]
+    ACT_REQUEST --> ACT_VERIFY[Authenticate cardholder and verify activation details]
+    ACT_VERIFY --> AUTH_OK{Authentication successful?}
+    AUTH_OK -- No --> SECURITY_EXCEPTION[Block activation and resolve security exception]
+    SECURITY_EXCEPTION --> SECURITY_RESOLVED{Identity concern resolved?}
+    SECURITY_RESOLVED -- Yes --> ACT_VERIFY
+    SECURITY_RESOLVED -- No --> ACTIVATION_STOPPED[Stop activation and retain card controls]
+    AUTH_OK -- Yes --> ACTIVATE[Activate card and apply agreed usage controls]
+    ACTIVATE --> ACTIVATED{Activation successful?}
+    ACTIVATED -- No --> ACTIVATION_REPAIR[Investigate and repair activation failure]
+    ACTIVATION_REPAIR --> ACTIVATE
+    ACTIVATED -- Yes --> CONFIRM[Send activation and security guidance]
+    CONFIRM --> CARD_ACTIVE[Card active]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3 phase
+    class VERIFY,SCREEN,MANUAL_REVIEW,UNDERWRITE,ACT_VERIFY control
+    class REQUEST_INFO,DELIVERY_EXCEPTION,SECURITY_EXCEPTION,ACTIVATION_REPAIR exception
+    class CARD_ACTIVE success
+    class WITHDRAWN,DECLINED,OFFER_EXPIRED,ACTIVATION_STOPPED terminal

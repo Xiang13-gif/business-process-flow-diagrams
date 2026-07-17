@@ -1,0 +1,62 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Retail account opening and activation
+    accDescr: Illustrative retail account flow from application and identity checks through screening, account setup, activation, and exception handling.
+
+    P1([Phase 1: Application intake]) --> START[Customer starts a retail account application]
+    START --> DETAILS[Capture customer, product, and contact details]
+    DETAILS --> CONSENT[Record required notices and customer consent]
+    CONSENT --> DOCUMENTS[Collect identity and supporting documents]
+    DOCUMENTS --> COMPLETE{Application complete?}
+    COMPLETE -- No --> REQUEST_INFO[Request missing or corrected information]
+    REQUEST_INFO --> PROVIDED{Information supplied before deadline?}
+    PROVIDED -- Yes --> DOCUMENTS
+    PROVIDED -- No --> WITHDRAWN[Close incomplete application]
+    COMPLETE -- Yes --> P2([Phase 2: Verification and eligibility])
+
+    P2 --> VERIFY[Verify identity and document validity]
+    VERIFY --> IDENTITY_CLEAR{Identity verified?}
+    IDENTITY_CLEAR -- No --> VERIFY_EXCEPTION[Route verification exception for review]
+    VERIFY_EXCEPTION --> IDENTITY_RESOLVED{Exception resolved?}
+    IDENTITY_RESOLVED -- Yes --> VERIFY
+    IDENTITY_RESOLVED -- No --> DECLINED[Decline account application]
+    IDENTITY_CLEAR -- Yes --> SCREEN[Perform required screening and risk checks]
+    SCREEN --> SCREEN_CLEAR{Screening outcome acceptable?}
+    SCREEN_CLEAR -- No --> COMPLIANCE_REVIEW[Escalate for compliance review]
+    COMPLIANCE_REVIEW --> COMPLIANCE_OK{Proceed approved?}
+    COMPLIANCE_OK -- Yes --> ELIGIBILITY
+    COMPLIANCE_OK -- No --> DECLINED
+    SCREEN_CLEAR -- Yes --> ELIGIBILITY[Confirm product eligibility and account terms]
+    ELIGIBILITY --> ELIGIBLE{Eligible to open account?}
+    ELIGIBLE -- No --> DECLINED
+    ELIGIBLE -- Yes --> P3([Phase 3: Setup and activation])
+
+    P3 --> SETUP[Create customer and account records]
+    SETUP --> CONFIGURE[Configure product features, access, and account controls]
+    CONFIGURE --> SETUP_CHECK[Reconcile setup to approved application]
+    SETUP_CHECK --> SETUP_OK{Setup accurate?}
+    SETUP_OK -- No --> CORRECT_SETUP[Correct account setup discrepancy]
+    CORRECT_SETUP --> SETUP
+    SETUP_OK -- Yes --> FUNDING[Complete any required initial funding step]
+    FUNDING --> READY{Ready for activation?}
+    READY -- No --> ACTIVATION_HOLD[Place activation on hold and notify owner]
+    ACTIVATION_HOLD --> HOLD_RESOLVED{Hold resolved?}
+    HOLD_RESOLVED -- Yes --> FUNDING
+    HOLD_RESOLVED -- No --> CANCELLED[Cancel account before activation]
+    READY -- Yes --> ACTIVATE[Activate account and agreed access channels]
+    ACTIVATE --> ACTIVATED{Activation successful?}
+    ACTIVATED -- No --> ACTIVATION_REPAIR[Investigate and repair activation failure]
+    ACTIVATION_REPAIR --> ACTIVATE
+    ACTIVATED -- Yes --> CONFIRM[Send account and activation confirmation]
+    CONFIRM --> ACTIVE[Account active]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3 phase
+    class VERIFY,SCREEN,COMPLIANCE_REVIEW,SETUP_CHECK control
+    class REQUEST_INFO,VERIFY_EXCEPTION,CORRECT_SETUP,ACTIVATION_HOLD,ACTIVATION_REPAIR exception
+    class ACTIVE success
+    class WITHDRAWN,DECLINED,CANCELLED terminal

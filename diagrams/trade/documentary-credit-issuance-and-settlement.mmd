@@ -1,0 +1,57 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+flowchart TD
+    accTitle: Documentary credit issuance and settlement
+    accDescr: Illustrative documentary credit process from application and issuance through document examination, discrepancy handling, settlement, and closure. It is not a product policy or legal procedure.
+
+    P1([Phase 1: Application and issuance]) --> START[Receive documentary credit application]
+    START --> INTAKE[Capture parties, goods, terms, and requested expiry]
+    INTAKE --> KYC[Complete customer, sanctions, and trade-risk checks]
+    KYC --> ELIGIBLE{Customer and facility eligible?}
+    ELIGIBLE -- No --> DECLINE[Decline request or request remediation]
+    DECLINE --> DECLINE_OUTCOME{Remediation accepted?}
+    DECLINE_OUTCOME -- Yes --> INTAKE
+    DECLINE_OUTCOME -- No --> NOT_PROCEEDED[Record outcome and notify applicant]
+    ELIGIBLE -- Yes --> TERMS_REVIEW[Review credit terms, collateral, and approval limits]
+    TERMS_REVIEW --> TERMS_OK{Terms approved?}
+    TERMS_OK -- No --> AMEND_REQUEST[Return terms for amendment or escalation]
+    AMEND_REQUEST --> INTAKE
+    TERMS_OK -- Yes --> ISSUE[Issue documentary credit and controlled message]
+    ISSUE --> ADVISE[Send to advising or nominated bank]
+    ADVISE --> ISSUED[Credit active and available]
+
+    ISSUED --> P2([Phase 2: Presentation and examination])
+    P2 --> PRESENT[Receive document presentation]
+    PRESENT --> REGISTER[Register documents and presentation date]
+    REGISTER --> EXAMINE[Examine documents against credit terms]
+    EXAMINE --> COMPLIANT{Documents compliant?}
+    COMPLIANT -- Yes --> HONOR_CHECK[Confirm available amount and settlement authority]
+    COMPLIANT -- No --> DISCREPANCY[Record discrepancies and place payment on hold]
+    DISCREPANCY --> WAIVER[Request applicant waiver or bank decision]
+    WAIVER --> WAIVED{Discrepancies accepted?}
+    WAIVED -- Yes --> HONOR_CHECK
+    WAIVED -- No --> REFUSE[Refuse presentation and return or hold documents]
+    REFUSE --> REFUSED[Presentation refused and case recorded]
+
+    HONOR_CHECK --> P3([Phase 3: Settlement and closure])
+    P3 --> SETTLE_READY{Funding and authority confirmed?}
+    SETTLE_READY -- No --> FUNDING_HOLD[Hold settlement and resolve funding or authority exception]
+    FUNDING_HOLD --> HOLD_RESOLVED{Exception resolved before expiry?}
+    HOLD_RESOLVED -- Yes --> SETTLE_READY
+    HOLD_RESOLVED -- No --> UNPAID[Record unpaid outcome and notify parties]
+    SETTLE_READY -- Yes --> HONOR[Honor, accept, or incur deferred-payment undertaking]
+    HONOR --> REIMBURSE[Send reimbursement or payment instruction]
+    REIMBURSE --> CONFIRM[Receive settlement confirmation]
+    CONFIRM --> RECONCILE[Reconcile charges, contingent exposure, and records]
+    RECONCILE --> CLOSE[Close or reduce credit exposure]
+    CLOSE --> SETTLED[Settlement complete and records retained]
+
+    classDef phase fill:#EDE9FE,stroke:#7C3AED,color:#4C1D95
+    classDef success fill:#DCFCE7,stroke:#16A34A,color:#14532D
+    classDef exception fill:#FEE2E2,stroke:#DC2626,color:#7F1D1D
+    classDef control fill:#FEF3C7,stroke:#D97706,color:#78350F
+    classDef terminal fill:#E2E8F0,stroke:#475569,color:#0F172A
+    class P1,P2,P3 phase
+    class KYC,TERMS_REVIEW,EXAMINE,HONOR_CHECK,RECONCILE control
+    class DECLINE,AMEND_REQUEST,DISCREPANCY,REFUSE,FUNDING_HOLD exception
+    class ISSUED,SETTLED success
+    class NOT_PROCEEDED,REFUSED,UNPAID terminal

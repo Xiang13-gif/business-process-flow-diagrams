@@ -1,0 +1,59 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Arial, sans-serif","primaryColor":"#E8F1FB","primaryTextColor":"#0F172A","primaryBorderColor":"#2563EB","lineColor":"#475569","secondaryColor":"#F8FAFC","tertiaryColor":"#ECFDF5","clusterBkg":"#F8FAFC","clusterBorder":"#94A3B8"}}}%%
+sequenceDiagram
+    accTitle: Fraud alert investigation and resolution
+    accDescr: Illustrative fraud-alert case sequence covering alert enrichment, urgent containment, evidence rework, investigation, recovery, loss handling, and documented terminal outcomes.
+
+    autonumber
+    participant Detection as Detection Service
+    participant Case as Case Service
+    participant Analyst
+    participant Operations as Product Operations
+    participant Customer
+
+    Detection->>Case: Create alert and preserve event evidence
+    Case->>Case: Check alert data completeness
+    alt Alert data is incomplete
+        Case->>Detection: Request transaction, customer, or device enrichment
+        Detection-->>Case: Supply available context
+    else Alert data is complete
+        Case->>Case: Record case readiness
+    end
+    Case->>Analyst: Assign risk-prioritized case
+    Analyst->>Case: Assess potential impact and containment need
+
+    alt Immediate containment is needed
+        Case->>Operations: Apply proportionate hold or restriction
+        Operations-->>Case: Confirm control applied
+        Case->>Customer: Notify when appropriate
+    else Immediate containment is not needed
+        Case->>Case: Record no immediate restriction
+    end
+
+    loop Until evidence is sufficient or a controlled decision is made
+        Analyst->>Case: Review activity, identity, and prior alerts
+        alt Evidence is insufficient
+            Analyst->>Customer: Request clarification or supporting information
+            Customer-->>Analyst: Provide information, or indicate it is unavailable
+            opt Information remains unavailable by the deadline
+                Analyst->>Case: Escalate incomplete case for controlled decision
+            end
+        else Evidence is sufficient
+            Analyst->>Case: Record investigation finding
+        end
+    end
+
+    alt Fraud or misuse is not supported
+        Analyst->>Case: Document rationale and alert-tuning feedback
+        Note over Case,Analyst: Terminal outcome: close as no fraud identified
+    else Fraud or misuse is supported
+        Analyst->>Operations: Confirm affected products and funds
+        alt Reversal or recovery is viable
+            Operations->>Operations: Initiate recall, reversal, or recovery
+            Operations-->>Case: Record recovered or unrecovered result
+        else Recovery is not viable
+            Operations-->>Case: Record loss and begin applicable claims handling
+        end
+        Case->>Customer: Communicate outcome and remediation
+        Case->>Case: Record controls and monitoring actions
+        Note over Case,Customer: Terminal outcome: close case and monitor recurrence
+    end
